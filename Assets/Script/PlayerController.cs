@@ -7,6 +7,13 @@ public class PlayerController : MonoBehaviour
     [Header("补偿速度")]
     public float lightSpeed;
 
+    [Header("打击感")]
+    public float shakeTime;
+
+    public int lightPause;
+
+    public float lightStrength;
+
     [Space]
     public float runSpeed = 2.0f;
     public float jumpSpeed;
@@ -156,5 +163,18 @@ public class PlayerController : MonoBehaviour
     public void AttackOver()
     {
         isAttack = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            if (attackType == "Light")
+            {
+                AttackSense.Instance.HitPause(lightPause);
+                AttackSense.Instance.CameraShake(shakeTime, lightStrength);
+            }
+            //敌人受伤的函数
+        }
     }
 }
