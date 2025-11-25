@@ -4,9 +4,22 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("²¹³¥ËÙ¶È")]
+    public float lightSpeed;
 
+    [Space]
     public float runSpeed = 2.0f;
     public float jumpSpeed;
+
+    private int comboStep;
+
+    public float interval = 2f;
+
+    private float timer;
+
+    private bool isAttack;
+
+    private string attackType;
 
     private Rigidbody2D playerRigidbody;
     private Animator playerAnim;
@@ -30,6 +43,8 @@ public class PlayerController : MonoBehaviour
         Jump();
         CheckGrounded();
         SwitchAnimation();
+
+        Attack();
     }
 
     void CheckGrounded()
@@ -56,10 +71,20 @@ public class PlayerController : MonoBehaviour
     void Run()
     {
         float moveDir = Input.GetAxisRaw("Horizontal");
-        Vector2 playerVel = new Vector2(moveDir * runSpeed, playerRigidbody.velocity.y);
-        playerRigidbody.velocity = playerVel;
-        bool playerHasXAxisSpeed = Mathf.Abs(playerRigidbody.velocity.x) > Mathf.Epsilon;
-        playerAnim.SetBool("Run", playerHasXAxisSpeed);
+
+        if (!isAttack) 
+        {
+            Vector2 playerVel = new Vector2(moveDir * runSpeed, playerRigidbody.velocity.y);
+            playerRigidbody.velocity = playerVel;
+
+            bool playerHasXAxisSpeed = Mathf.Abs(playerRigidbody.velocity.x) > Mathf.Epsilon;
+            playerAnim.SetBool("Run", playerHasXAxisSpeed);
+        }else if (attackType=="Light")
+        {
+            Vector2 playerVel = new Vector2(moveDir * lightSpeed, playerRigidbody.velocity.y);
+            playerRigidbody.velocity = playerVel;
+        }
+        
 
     }
 
@@ -100,5 +125,36 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetBool("Fall", true);
         }
 
+    }
+
+    void Attack()
+    {
+        if (Input.GetKeyDown(KeyCode.Return) && !isAttack)
+        {
+            isAttack = true;
+            attackType = "Light";
+            comboStep++;
+            if(comboStep>3)
+                comboStep = 1;
+            timer = interval;
+            playerAnim.SetTrigger("LightAttack");
+            playerAnim.SetInteger("ComboStep", comboStep);
+        }
+
+        if (timer!=0)
+        {
+            timer-=Time.deltaTime;
+            if (timer <= 0)
+            {
+                timer = 0;
+                comboStep = 0;
+            }
+        }
+
+    }
+
+    public void AttackOver()
+    {
+        isAttack = false;
     }
 }
