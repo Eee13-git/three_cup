@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    private float moveDir;
     [Header("补偿速度")]
     public float lightSpeed;
 
@@ -13,6 +15,18 @@ public class PlayerController : MonoBehaviour
     public int lightPause;
 
     public float lightStrength;
+    [Header("CD的UI组件")]
+    public Image cdImage;
+
+    [Header("Dash参数")]
+    public float dashTime;//dash时长
+    private float dashTimeLeft;//dash剩余时间
+    private float lastDash=-10f;//上次dash的时间点
+    public float dashCoolDown;
+    public float dashSpeed;
+    public bool isDashing;
+
+    
 
     [Space]
     public float runSpeed = 2.0f;
@@ -31,7 +45,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D playerRigidbody;
     private Animator playerAnim;
     private int JumpFrequemcy = 1;
-    private BoxCollider2D playerFeet;
+    private CircleCollider2D playerFeet;
     private bool isGround;
 
     // Start is called before the first frame update
@@ -39,7 +53,7 @@ public class PlayerController : MonoBehaviour
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
         playerAnim = GetComponent<Animator>();
-        playerFeet = GetComponent<BoxCollider2D>();
+        playerFeet = GetComponent<CircleCollider2D>();
     }
 
     // Update is called once per frame
@@ -52,8 +66,16 @@ public class PlayerController : MonoBehaviour
         SwitchAnimation();
 
         Attack();
-    }
+        Dash();
 
+        cdImage.fillAmount -= 1.0f/dashCoolDown*Time.deltaTime;
+    }
+    private void FixedUpdate()
+    {
+        DashAct();
+        
+
+    }
     void CheckGrounded()
     {
         isGround  = playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground"));
@@ -77,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
     void Run()
     {
-        float moveDir = Input.GetAxisRaw("Horizontal");
+        moveDir = Input.GetAxisRaw("Horizontal");
 
         if (!isAttack) 
         {
@@ -150,7 +172,7 @@ public class PlayerController : MonoBehaviour
 
         if (timer!=0)
         {
-            timer-=Time.deltaTime;
+            timer-= Time.deltaTime;
             if (timer <= 0)
             {
                 timer = 0;
@@ -159,6 +181,60 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    void Dash()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            if(Time.time >= (lastDash + dashCoolDown))
+            {
+               ReadyToDash();
+               
+            }
+        }
+    }
+    void ReadyToDash()
+    {
+        isDashing = true;
+
+        dashTimeLeft = dashTime;
+
+        lastDash = Time.time;
+
+        cdImage.fillAmount = 1.0f;
+    }
+
+    void DashAct()
+    {
+        if (isDashing)
+        {
+            if (dashTimeLeft > 0)
+            {
+                if (playerRigidbody.velocity.y > 0 && !isGround)
+                {
+                    playerRigidbody.velocity = new Vector2(dashSpeed * moveDir, jumpSpeed);
+                }
+
+                playerRigidbody.velocity =new Vector2(dashSpeed * moveDir, playerRigidbody.velocity.y);
+
+                dashTimeLeft-= Time.deltaTime;
+
+                ShadowPool.instance.GetFromPool();
+                //Debug.Log("Dash");
+            }
+            if (dashTimeLeft <= 0)
+            {
+            isDashing =false;
+                if (!isGround)
+                {
+                    playerRigidbody.velocity = new Vector2(dashSpeed * moveDir, jumpSpeed);
+                }
+            }
+
+        }
+        
+    }
+
 
     public void AttackOver()
     {

@@ -27,7 +27,8 @@ public class AttackSense : MonoBehaviour
     {
         float pauseTime = duration / 60f;
         Time.timeScale = 0;
-        yield return new WaitForSeconds(pauseTime);
+        // 使用不受 timeScale 影响的等待
+        yield return new WaitForSecondsRealtime(pauseTime);
         Time.timeScale = 1;
     }
 
@@ -45,14 +46,16 @@ public class AttackSense : MonoBehaviour
         isShake = true;
         Transform camera = Camera.main.transform;
         Vector3 startPosition = camera.position;
+
         while (duration>0)
         {
             camera.position = Random.insideUnitSphere * strength + startPosition;
-            duration -=Time.deltaTime;
+            duration -= Time.deltaTime;
             yield return null;
         }
+        // 恢复摄像机初始位置
         //camera.position = startPosition;
+        
         isShake = false;
-
     }
 }
