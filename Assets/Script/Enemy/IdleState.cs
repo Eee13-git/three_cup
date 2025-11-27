@@ -139,12 +139,21 @@ public class ChaseState : IState
 
     public void OnEnter()
     {
-
+        parameter.animator.Play("Walk");
     }
 
     public void OnUpdate()
     {
-
+        manager.FlipTo(parameter.target);
+        if (parameter.target)
+            manager.transform.position = Vector2.MoveTowards(manager.transform.position,
+            parameter.target.position, parameter.chaseSpeed * Time.deltaTime);
+        if(parameter.target == null ||
+            manager.transform.position.x < parameter.chasePoints[0].position.x ||
+            manager.transform.position.x > parameter.chasePoints[1].position.x)
+        {
+            manager.TransitionState(StateType.Idle);
+        }
     }
 
     public void OnExit()
