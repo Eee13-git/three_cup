@@ -117,16 +117,16 @@ AnimatorStateMachine:
     m_Position: {x: 330, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 806010668397358902}
-    m_Position: {x: 260, y: 160, z: 0}
+    m_Position: {x: 330, y: 120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 9090832538506128558}
     m_Position: {x: 220, y: -70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5458782679635953954}
-    m_Position: {x: 100, y: 240, z: 0}
+    m_Position: {x: 90, y: 260, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 4379810778047889297}
-    m_Position: {x: 400, y: 340, z: 0}
+    m_State: {fileID: 5819640605472327275}
+    m_Position: {x: 390, y: 240, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -163,14 +163,14 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &4379810778047889297
+--- !u!1102 &5819640605472327275
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: walk
+  m_Name: Walk
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []

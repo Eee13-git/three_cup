@@ -92,11 +92,12 @@ public class PatrolState : IState
     public void OnEnter()
     {
         parameter.animator.Play("Walk");
-        Debug.Log("Walk");
+        //Debug.Log("Walk");
     }
 
     public void OnUpdate()
     {
+
         //始终朝向巡逻点
         manager.FlipTo(parameter.patrolPoints[patrolPosition]);
         //从现位置到巡逻点位置，以一定速度移动的函数

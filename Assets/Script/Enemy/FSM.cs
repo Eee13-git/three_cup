@@ -26,6 +26,13 @@ public class Parameter
     public Transform[] patrolPoints;
     //追击范围
     public Transform[] chasePoints;
+    //储存角色位置
+    public Transform target;
+
+    //用于检测攻击距离
+    public LayerMask targetLayer;   
+    public Transform attackPoint;   //圆心检测位置
+    public float attackArea;        //圆的半径参数
 
     //获取动画器组件
     public Animator animator;
@@ -43,7 +50,11 @@ public class FSM : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        //获取动画器组件
+        Parameter.animator = GetComponent<Animator>();
+
+
         states.Add(StateType.Idle, new IdleState(this));
         states.Add(StateType.Attack, new AttackState(this));
         states.Add(StateType.Patrol, new PatrolState(this));
@@ -53,8 +64,6 @@ public class FSM : MonoBehaviour
         //设置初始状态值
         TransitionState(StateType.Idle);
 
-        //获取动画器组件
-        Parameter.animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -87,5 +96,30 @@ public class FSM : MonoBehaviour
                 transform.localScale = new Vector3(1, 1, 1);
             }
         }
+    }
+
+    //视线碰撞箱与角色碰撞箱碰撞时自动调用
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Player"))
+        {
+            Parameter.target = other.transform;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Parameter.target = null;
+        }
+    }
+
+
+    //检测攻击距离绘画图像
+    private void OnDrawGizmos()
+    {
+        //在攻击位置画圆
+        Gizmos.DrawWireSphere(Parameter.attackPoint.position, Parameter.attackArea);
     }
 }
