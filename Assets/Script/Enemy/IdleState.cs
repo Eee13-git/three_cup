@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEditor;
 using UnityEngine;
 
 public class IdleState : IState
@@ -29,6 +30,20 @@ public class IdleState : IState
     {
         timer += Time.deltaTime;
 
+        //如果受伤
+        if(parameter.getHit == true)
+        {
+            manager.TransitionState(StateType.Hit);
+        }
+
+
+        //如果看到玩家
+        if (parameter.target != null &&
+            parameter.target.position.x >= parameter.chasePoints[0].position.x &&
+            parameter.target.position.x <= parameter.chasePoints[1].position.x)
+        {
+            manager.TransitionState(StateType.Chase);
+        }
         if (timer > parameter.idleTime)
         {
             manager.TransitionState(StateType.Patrol);
@@ -49,6 +64,8 @@ public class AttackState : IState
     //获取设置的属性
     private Parameter parameter;
 
+    //存储 Animator（动画控制器）中当前状态的关键信息
+    private AnimatorStateInfo info;
     //构造函数
     public AttackState(FSM manager)
     {
@@ -58,12 +75,27 @@ public class AttackState : IState
 
     public void OnEnter()
     {
-
+        float x = Random.value;
+        if (x >= 0.5)
+            parameter.animator.Play("Attack_1");
+        else
+            parameter.animator.Play("Attack_2");
     }
 
     public void OnUpdate()
     {
+        //如果受伤
+        if (parameter.getHit == true)
+        {
+            manager.TransitionState(StateType.Hit);
+        }
 
+        info = parameter.animator.GetCurrentAnimatorStateInfo(0);
+
+        if(info.normalizedTime >= 0.95f)
+        {
+            manager.TransitionState(StateType.Chase);
+        }
     }
 
     public void OnExit()
@@ -97,6 +129,19 @@ public class PatrolState : IState
 
     public void OnUpdate()
     {
+        //如果受伤
+        if (parameter.getHit == true)
+        {
+            manager.TransitionState(StateType.Hit);
+        }
+
+        //如果看到玩家
+        if (parameter.target != null &&
+        parameter.target.position.x >= parameter.chasePoints[0].position.x &&
+        parameter.target.position.x <= parameter.chasePoints[1].position.x)
+        {
+            manager.TransitionState(StateType.Chase);
+        }
 
         //始终朝向巡逻点
         manager.FlipTo(parameter.patrolPoints[patrolPosition]);
@@ -144,7 +189,14 @@ public class ChaseState : IState
 
     public void OnUpdate()
     {
+        //如果受伤
+        if (parameter.getHit == true)
+        {
+            manager.TransitionState(StateType.Hit);
+        }
+
         manager.FlipTo(parameter.target);
+
         if (parameter.target)
             manager.transform.position = Vector2.MoveTowards(manager.transform.position,
             parameter.target.position, parameter.chaseSpeed * Time.deltaTime);
@@ -153,6 +205,10 @@ public class ChaseState : IState
             manager.transform.position.x > parameter.chasePoints[1].position.x)
         {
             manager.TransitionState(StateType.Idle);
+        }
+        if(Physics2D.OverlapCircle(parameter.attackPoint.position, parameter.attackArea, parameter.targetLayer))
+        {
+            manager.TransitionState(StateType.Attack);
         }
     }
 
@@ -163,15 +219,18 @@ public class ChaseState : IState
 }
 
 
-public class ReactState : IState
+public class HitState : IState
 {
     //添加状态机的引用
     private FSM manager;
     //获取设置的属性
     private Parameter parameter;
 
+    //存储 Animator（动画控制器）中当前状态的关键信息
+    private AnimatorStateInfo info;
+
     //构造函数
-    public ReactState(FSM manager)
+    public HitState(FSM manager)
     {
         this.manager = manager;
         this.parameter = manager.Parameter;
@@ -179,7 +238,53 @@ public class ReactState : IState
 
     public void OnEnter()
     {
+        parameter.animator.Play("Hurt");
+        Debug.Log("扣血");
+        parameter.health--;
+    }
 
+    public void OnUpdate()
+    {
+        info = parameter.animator.GetCurrentAnimatorStateInfo(0);
+        if (info.normalizedTime >= 0.95f)
+        {
+            if (parameter.health <= 0)
+            {
+                manager.TransitionState(StateType.Die);
+            }
+            else
+            {
+                parameter.target = GameObject.FindWithTag("Player").transform;
+
+                manager.TransitionState(StateType.Chase);
+            }
+        }
+    }
+    public void OnExit()
+    {
+        parameter.getHit = false;
+    }
+}
+
+
+
+public class DieState : IState
+{
+    //添加状态机的引用
+    private FSM manager;
+    //获取设置的属性
+    private Parameter parameter;
+
+    //构造函数
+    public DieState(FSM manager)
+    {
+        this.manager = manager;
+        this.parameter = manager.Parameter;
+    }
+
+    public void OnEnter()
+    {
+        parameter.animator.Play("Die");
     }
 
     public void OnUpdate()
@@ -192,5 +297,3 @@ public class ReactState : IState
 
     }
 }
-
-
