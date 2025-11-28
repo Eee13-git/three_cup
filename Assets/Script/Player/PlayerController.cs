@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
     void Flip()
     {
         bool playerHasXAxisSpeed = Mathf.Abs(playerRigidbody.velocity.x) > Mathf.Epsilon;
-        if (playerHasXAxisSpeed)
+        if (playerHasXAxisSpeed&&!isAttack)
         {
             if(playerRigidbody.velocity.x > 0.1f)
             {

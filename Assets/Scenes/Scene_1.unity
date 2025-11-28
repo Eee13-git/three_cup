@@ -1166,7 +1166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 636628144}
   - component: {fileID: 636628145}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: AttackArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1750,7 +1750,7 @@ GameObject:
   - component: {fileID: 1112801817}
   - component: {fileID: 1112801816}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
