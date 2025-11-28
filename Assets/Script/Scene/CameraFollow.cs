@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
+    [Header("跟随设置")]
     private GameObject Player;
     public string playerTag = "Player";
     public float positionSmooth = 5f; // 位置平滑度（值越大越快）
@@ -12,6 +13,10 @@ public class CameraFollow : MonoBehaviour
     [Header("景深控制")]
     public Transform farBackground,middleBackFround,nearBackground;//远景、中景、近景
     private Vector2 lastPos;//上一帧摄像机位置
+
+    [Header("移动范围")]
+    public Vector2 minPosition;
+    public Vector2 maxPosition;
 
     void Start()
     {
@@ -52,6 +57,11 @@ public class CameraFollow : MonoBehaviour
         // 目标位置（只跟随 x,y，保持相机 z 不变）
         Vector3 targetPos = Player.transform.position + new Vector3(offset.x, offset.y, 0f);
         targetPos.z = transform.position.z;
+
+        targetPos.x = Mathf.Clamp(targetPos.x, minPosition.x, maxPosition.x);
+        targetPos.y = Mathf.Clamp(targetPos.y, minPosition.y, maxPosition.y);
+
+
         transform.position = Vector3.Lerp(transform.position, targetPos, positionSmooth * Time.deltaTime);
     }
     private void FindPlayer()
@@ -72,5 +82,11 @@ public class CameraFollow : MonoBehaviour
         nearBackground.position += new Vector3(amountToMove.x * 0.2f, amountToMove.y * 0.2f, 0);
 
         lastPos = transform.position;
+    }
+
+    public void SetCamPosLimit(Vector2 minPos,Vector2 maxPos)
+    {
+        minPosition = minPos;
+        maxPosition = maxPos;
     }
 }

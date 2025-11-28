@@ -7,7 +7,7 @@ public class MapMove : MonoBehaviour
     [Header("无限地图")]
     public GameObject mainCamera;
     public float mapWidth;//地图宽度
-    public int mapNums;//地图重复次数
+    public float mapNums;//地图重复次数
 
     private float totalWidth;//总地图宽度
 

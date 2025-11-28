@@ -5,7 +5,13 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    private float moveDir;
+    [Header("角色属性面板")]
+    [SerializeField]
+    private float Health;
+    [SerializeField]
+    private float AttackStrength;
+    [SerializeField]
+    private float CriticalRate;
     [Header("补偿速度")]
     public float lightSpeed;
 
@@ -25,10 +31,9 @@ public class PlayerController : MonoBehaviour
     public float dashCoolDown;
     public float dashSpeed;
     public bool isDashing;
-
-    
-
     [Space]
+    private float moveDir;//移动方向
+
     public float runSpeed = 2.0f;
     public float jumpSpeed;
 
@@ -240,6 +245,7 @@ public class PlayerController : MonoBehaviour
         isAttack = false;
     }
 
+    //攻击检测
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Enemy"))
@@ -250,6 +256,20 @@ public class PlayerController : MonoBehaviour
                 AttackSense.Instance.CameraShake(shakeTime, lightStrength);
             }
             //敌人受伤的函数
+        }
+    }
+
+    public void PlayerHurt(int damage)
+    {
+        Health -= damage;
+        if (Health>0)
+        {
+            playerAnim.SetTrigger("Hurt");
+        }
+        if (Health <= 0)
+        {
+            playerAnim.SetBool("Die",true);
+            //玩家死亡的函数(待写)
         }
     }
 }
