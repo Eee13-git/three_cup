@@ -9,7 +9,7 @@ using UnityEngine;
 //状态枚举
 public enum StateType
 {
-    Idle, Patrol, Chase, Attack, React
+    Idle, Patrol, Chase, Attack, Hit, Die
 }
 
 //让编译器序列化这个类,作用是在监视面板看到并编辑参数
@@ -33,6 +33,10 @@ public class Parameter
     public LayerMask targetLayer;   
     public Transform attackPoint;   //圆心检测位置
     public float attackArea;        //圆的半径参数
+    //用于模拟敌人受到攻击
+    public bool getHit;
+    //
+
 
     //获取动画器组件
     public Animator animator;
@@ -59,7 +63,8 @@ public class FSM : MonoBehaviour
         states.Add(StateType.Attack, new AttackState(this));
         states.Add(StateType.Patrol, new PatrolState(this));
         states.Add(StateType.Chase, new ChaseState(this));
-        states.Add(StateType.React, new ReactState(this));
+        states.Add(StateType.Hit, new HitState(this));
+        states.Add(StateType.Die, new DieState(this));
 
         //设置初始状态值
         TransitionState(StateType.Idle);
@@ -70,6 +75,11 @@ public class FSM : MonoBehaviour
     void Update()
     {
         currentState.OnUpdate();
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Parameter.getHit = true;
+        }
     }
 
     //切换状态
@@ -79,7 +89,6 @@ public class FSM : MonoBehaviour
             currentState.OnExit();
         currentState = states[type];
         currentState.OnEnter();
-        Debug.Log("进入Walk");
     }
 
     //朝向目标位置

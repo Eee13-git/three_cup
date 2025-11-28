@@ -220,7 +220,6 @@ public class PlayerController : MonoBehaviour
                 dashTimeLeft-= Time.deltaTime;
 
                 ShadowPool.instance.GetFromPool();
-                //Debug.Log("Dash");
             }
             if (dashTimeLeft <= 0)
             {
