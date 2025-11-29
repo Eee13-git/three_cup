@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MyEcho : MonoBehaviour
 {
+    private bool isDead;
     [Header("记录状态设置")]
     [SerializeField]
     private float recordInterval = 0.02f; // 记录间隔50帧
@@ -21,6 +22,8 @@ public class MyEcho : MonoBehaviour
     private Animator echoAnimator;
     [SerializeField]
     private BoxCollider2D echoCollider;
+
+    private PlayerController playerController;
 
     [Header("打击感")]
     public float shakeTime;
@@ -54,6 +57,7 @@ public class MyEcho : MonoBehaviour
         {
             transform.SetParent(null, true);
         }
+        playerController = player.GetComponent<PlayerController>();
     }
 
     void Start()
@@ -65,15 +69,27 @@ public class MyEcho : MonoBehaviour
 
     void Update()
     {
-        // 按间隔记录状态
-        if (Time.time - lastRecordTime >= recordInterval)
+        if (!playerController.isDead)
         {
-            RecordState();
-            lastRecordTime = Time.time;
+            // 按间隔记录状态
+            if (Time.time - lastRecordTime >= recordInterval)
+            {
+
+                RecordState();
+                lastRecordTime = Time.time;
+
+            }
+
+            // 根据延迟播放历史状态（使用向上取整确保延迟至少为目标值）
+            UpdateState();
+            isDead = false;
+        }
+        if (playerController.isDead && !isDead)
+        {
+            echoAnimator.Play("Die");
+            isDead = true;
         }
 
-        // 根据延迟播放历史状态（使用向上取整确保延迟至少为目标值）
-        UpdateState();
     }
 
     private void RecordState()

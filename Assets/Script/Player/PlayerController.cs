@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    private bool isInputEnabled = true;
+
     [Header("角色属性面板")]
     [SerializeField]
     private float Health;
@@ -14,6 +16,8 @@ public class PlayerController : MonoBehaviour
     private float AttackStrength;
     [SerializeField]
     private float CriticalRate;
+    [SerializeField]
+    public float DieTime;
     [Header("补偿速度")]
     public float lightSpeed;
 
@@ -49,6 +53,8 @@ public class PlayerController : MonoBehaviour
 
     private bool isDefend;
 
+    public bool isDead;
+
     private string attackType;
 
     private Rigidbody2D playerRigidbody;
@@ -60,6 +66,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        updateUI();
+
         playerRigidbody = GetComponent<Rigidbody2D>();
         playerAnim = GetComponent<Animator>();
         playerFeet = GetComponent<CircleCollider2D>();
@@ -69,18 +77,28 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Run();
-        Flip();
-        Jump();
-        CheckGrounded();
-        SwitchAnimation();
+        if (isInputEnabled) {
+            Run();
+            Flip();
+            Jump();
+            CheckGrounded();
+            SwitchAnimation();
 
-        Attack();
-        Defend();
-        Dash();
-
+            Attack();
+            Defend();
+            Dash();
+        }
         cdImage.fillAmount -= 1.0f/dashCoolDown*Time.deltaTime;
     }
+
+    public void updateUI()
+    {
+        HealthBar.HealthMax = MaxHealth;
+        HealthBar.HealthCureent = Health;
+        HealthBar.attackStrength = AttackStrength;
+        HealthBar.criticalRate = CriticalRate;
+    }
+
     private void FixedUpdate()
     {
         DashAct();
@@ -270,15 +288,24 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            if (attackType == "Light")
-            {
+            //if (attackType == "Light")
+            //{
                 AttackSense.Instance.HitPause(lightPause);
                 AttackSense.Instance.CameraShake(shakeTime, lightStrength);
-            }
+            //}
             //敌人受伤的函数
-            Debug.Log("命中");
+            //Debug.Log("命中");
             FSM fsm = other.GetComponent<FSM>();
+
+
+            //暴击判定
+            float randomValue = Random.Range(0f, 1f);
+
+            if (randomValue<=CriticalRate) {
+               fsm.GetHurt(AttackStrength*1.5f);
+            }
             fsm.GetHurt(AttackStrength);
+
         }
         if (isDefend)
         {
@@ -289,23 +316,32 @@ public class PlayerController : MonoBehaviour
 
     public void PlayerHurt(float damage)
     {
-        Health -= damage;
+        
+        
         if (Health>0)
         {
             playerAnim.SetTrigger("Hurt");
+            Health -= damage;
         }
-        if (Health <= 0)
+        if (Health <= 0&&!isDead)
         {
-            playerAnim.SetBool("Die",true);
+            Health = 0;
+            isDead = true;
+            playerAnim.SetTrigger("Die");
             //玩家重生
-            Invoke("PlayerReburn",2);
+            isInputEnabled = false;
+            Invoke("PlayerReburn",DieTime);
         }
+        HealthBar.HealthCureent = Health;
     }
 
     private void PlayerReburn()
     {
-        playerAnim.SetBool("Die", false);
+        isDead = false;
+        playerAnim.Play("Player_Idle");
         this.transform.position = PlayerInfo.Instance.lastPoint;
         Health = MaxHealth;
+        HealthBar.HealthCureent = Health;
+        isInputEnabled = true;
     }
 }
