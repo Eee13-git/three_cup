@@ -5,7 +5,14 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    private float moveDir;
+    [Header("角色属性面板")]
+    [SerializeField]
+    private float Health;
+    private float MaxHealth;
+    [SerializeField]
+    private float AttackStrength;
+    [SerializeField]
+    private float CriticalRate;
     [Header("补偿速度")]
     public float lightSpeed;
 
@@ -25,10 +32,9 @@ public class PlayerController : MonoBehaviour
     public float dashCoolDown;
     public float dashSpeed;
     public bool isDashing;
-
-    
-
     [Space]
+    private float moveDir;//移动方向
+
     public float runSpeed = 2.0f;
     public float jumpSpeed;
 
@@ -48,11 +54,13 @@ public class PlayerController : MonoBehaviour
     private bool isGround;
 
     // Start is called before the first frame update
+
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
         playerAnim = GetComponent<Animator>();
         playerFeet = GetComponent<CircleCollider2D>();
+        cdImage = GameObject.Find("Dash").GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -83,7 +91,7 @@ public class PlayerController : MonoBehaviour
     void Flip()
     {
         bool playerHasXAxisSpeed = Mathf.Abs(playerRigidbody.velocity.x) > Mathf.Epsilon;
-        if (playerHasXAxisSpeed)
+        if (playerHasXAxisSpeed&&!isAttack)
         {
             if(playerRigidbody.velocity.x > 0.1f)
             {
@@ -239,6 +247,7 @@ public class PlayerController : MonoBehaviour
         isAttack = false;
     }
 
+    //攻击检测
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Enemy"))
@@ -250,5 +259,27 @@ public class PlayerController : MonoBehaviour
             }
             //敌人受伤的函数
         }
+    }
+
+    public void PlayerHurt(float damage)
+    {
+        Health -= damage;
+        if (Health>0)
+        {
+            playerAnim.SetTrigger("Hurt");
+        }
+        if (Health <= 0)
+        {
+            playerAnim.SetBool("Die",true);
+            //玩家重生
+            Invoke("PlayerReburn",2);
+        }
+    }
+
+    private void PlayerReburn()
+    {
+        playerAnim.SetBool("Die", false);
+        this.transform.position = PlayerInfo.Instance.lastPoint;
+        Health = MaxHealth;
     }
 }
