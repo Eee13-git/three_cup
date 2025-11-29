@@ -44,7 +44,6 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D playerRigidbody;
     private Animator playerAnim;
-    private int JumpFrequemcy = 1;
     private CircleCollider2D playerFeet;
     private bool isGround;
 

@@ -33,7 +33,7 @@ public class IdleState : IState
         //如果受伤
         if(parameter.getHit == true)
         {
-            manager.TransitionState(StateType.Hit);
+            manager.TransitionState(StateType.Hurt);
         }
 
 
@@ -87,7 +87,7 @@ public class AttackState : IState
         //如果受伤
         if (parameter.getHit == true)
         {
-            manager.TransitionState(StateType.Hit);
+            manager.TransitionState(StateType.Hurt);
         }
 
         info = parameter.animator.GetCurrentAnimatorStateInfo(0);
@@ -132,7 +132,7 @@ public class PatrolState : IState
         //如果受伤
         if (parameter.getHit == true)
         {
-            manager.TransitionState(StateType.Hit);
+            manager.TransitionState(StateType.Hurt);
         }
 
         //如果看到玩家
@@ -192,7 +192,7 @@ public class ChaseState : IState
         //如果受伤
         if (parameter.getHit == true)
         {
-            manager.TransitionState(StateType.Hit);
+            manager.TransitionState(StateType.Hurt);
         }
 
         manager.FlipTo(parameter.target);
@@ -219,7 +219,7 @@ public class ChaseState : IState
 }
 
 
-public class HitState : IState
+public class HurtState : IState
 {
     //添加状态机的引用
     private FSM manager;
@@ -230,7 +230,7 @@ public class HitState : IState
     private AnimatorStateInfo info;
 
     //构造函数
-    public HitState(FSM manager)
+    public HurtState(FSM manager)
     {
         this.manager = manager;
         this.parameter = manager.Parameter;

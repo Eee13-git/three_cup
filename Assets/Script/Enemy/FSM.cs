@@ -9,7 +9,7 @@ using UnityEngine;
 //状态枚举
 public enum StateType
 {
-    Idle, Patrol, Chase, Attack, Hit, Die
+    Idle, Patrol, Chase, Attack, Hurt, Die
 }
 
 //让编译器序列化这个类,作用是在监视面板看到并编辑参数
@@ -63,7 +63,7 @@ public class FSM : MonoBehaviour
         states.Add(StateType.Attack, new AttackState(this));
         states.Add(StateType.Patrol, new PatrolState(this));
         states.Add(StateType.Chase, new ChaseState(this));
-        states.Add(StateType.Hit, new HitState(this));
+        states.Add(StateType.Hurt, new HurtState(this));
         states.Add(StateType.Die, new DieState(this));
 
         //设置初始状态值
@@ -107,21 +107,12 @@ public class FSM : MonoBehaviour
         }
     }
 
-    //视线碰撞箱与角色碰撞箱碰撞时自动调用
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if(other.CompareTag("Player"))
-        {
-            Parameter.target = other.transform;
-        }
-    }
 
-    private void OnTriggerExit2D(Collider2D other)
+    //受伤函数
+    public void GetHurt(int Attack) //输入攻击力
     {
-        if (other.CompareTag("Player"))
-        {
-            Parameter.target = null;
-        }
+        TransitionState(StateType.Hurt);
+        Parameter.health -= Attack;
     }
 
 
