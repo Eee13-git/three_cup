@@ -46,8 +46,6 @@ public class PlayerController : MonoBehaviour
 
     private bool isAttack;
 
-    private bool isDefend;//影子暂定没有弹反
-
     private string attackType;
 
     private Rigidbody2D playerRigidbody;
@@ -62,7 +60,7 @@ public class PlayerController : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody2D>();
         playerAnim = GetComponent<Animator>();
         playerFeet = GetComponent<CircleCollider2D>();
-        
+        cdImage = GameObject.Find("Dash").GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -75,11 +73,8 @@ public class PlayerController : MonoBehaviour
         SwitchAnimation();
 
         Attack();
-        Defend();
         Dash();
 
-        if(cdImage==null)
-        cdImage = GameObject.Find("Dash").GetComponent<Image>();
         cdImage.fillAmount -= 1.0f/dashCoolDown*Time.deltaTime;
     }
     private void FixedUpdate()
@@ -194,15 +189,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void Defend()
-    {
-        if (Input.GetKeyDown(KeyCode.E)&&!isAttack)
-        {
-            playerAnim.SetTrigger("Defend");
-
-            isDefend = true;
-        }
-    }
     void Dash()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -261,33 +247,17 @@ public class PlayerController : MonoBehaviour
         isAttack = false;
     }
 
-    public void DefendOver()
-    {
-        isDefend = false;
-        playerAnim.SetBool("isDefend", false);
-        Debug.Log("弹反结束");
-    }
     //攻击检测
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Enemy"))
         {
-            
             if (attackType == "Light")
             {
                 AttackSense.Instance.HitPause(lightPause);
                 AttackSense.Instance.CameraShake(shakeTime, lightStrength);
-                
             }
             //敌人受伤的函数
-        }
-
-        //弹反
-        if (isDefend)
-        {
-            Debug.Log("弹反成功");
-            playerAnim.SetBool("isDefend",true);
-            isDefend = false;
         }
     }
 

@@ -11,7 +11,6 @@ public class MyEcho : MonoBehaviour
     private float targetDelay = 1f;
     private float lastRecordTime = 0f;
 
-    
     [SerializeField]
     private GameObject player;
     [SerializeField]
@@ -22,13 +21,7 @@ public class MyEcho : MonoBehaviour
     private Animator echoAnimator;
     [SerializeField]
     private BoxCollider2D echoCollider;
-
-    [Header("打击感")]
-    public float shakeTime;
-
-    public int lightPause;
-
-    public float lightStrength;
+    
 
     private struct PlayerState{
         public float time;
@@ -110,16 +103,5 @@ public class MyEcho : MonoBehaviour
             this.transform.localScale = newState.localScale;
             this.transform.position = newState.worldPos;
         }
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-                AttackSense.Instance.HitPause(lightPause);
-                AttackSense.Instance.CameraShake(shakeTime,lightStrength);
-            //敌人受伤的函数
-        }
-
     }
 }
