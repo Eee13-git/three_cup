@@ -47,7 +47,7 @@ public class ShadowPool : MonoBehaviour
         var outShadow = availableObjects.Dequeue();
 
         outShadow.SetActive(true);
-        Debug.Log("显示影子");
+        //Debug.Log("显示影子");
 
         return outShadow;
     }
