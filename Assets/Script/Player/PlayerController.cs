@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [Header("角色属性面板")]
     [SerializeField]
     private float Health;
+    [SerializeField]
     private float MaxHealth;
     [SerializeField]
     private float AttackStrength;
@@ -258,6 +259,9 @@ public class PlayerController : MonoBehaviour
                 AttackSense.Instance.CameraShake(shakeTime, lightStrength);
             }
             //敌人受伤的函数
+            Debug.Log("命中");
+            FSM fsm = other.GetComponent<FSM>();
+            fsm.GetHurt(AttackStrength);
         }
     }
 

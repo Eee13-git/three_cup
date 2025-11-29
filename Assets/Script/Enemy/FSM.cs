@@ -108,12 +108,13 @@ public class FSM : MonoBehaviour
     void Update()
     {
         currentState.OnUpdate();
-        
+        /*
         //≤‚ ‘ ‹…À
         if (Input.GetKeyDown(KeyCode.Return))
         {
             GetHurt(1);
         }
+        */
     }
 
     //«–ªª◊¥Ã¨
