@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour
 
     private bool isAttack;
 
+    private bool isDefend;
+
     private string attackType;
 
     private Rigidbody2D playerRigidbody;
@@ -74,6 +76,7 @@ public class PlayerController : MonoBehaviour
         SwitchAnimation();
 
         Attack();
+        Defend();
         Dash();
 
         cdImage.fillAmount -= 1.0f/dashCoolDown*Time.deltaTime;
@@ -190,6 +193,15 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    void Defend()
+    {
+        if(Input.GetKeyDown(KeyCode.E) && !isAttack&&!isDefend)
+        {
+            isDefend = true;
+            playerAnim.SetTrigger("Defend");
+        }
+    }
+
     void Dash()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -248,6 +260,11 @@ public class PlayerController : MonoBehaviour
         isAttack = false;
     }
 
+    public void DefendOver()
+    {
+        isDefend = false;
+    }
+
     //¹¥»÷¼ì²â
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -262,6 +279,11 @@ public class PlayerController : MonoBehaviour
             Debug.Log("ÃüÖÐ");
             FSM fsm = other.GetComponent<FSM>();
             fsm.GetHurt(AttackStrength);
+        }
+        if (isDefend)
+        {
+            playerAnim.SetTrigger("Defend_2");
+            isDefend = false;
         }
     }
 
