@@ -29,14 +29,19 @@ public class Area : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             enemyFSM.Parameter.target = other.transform;
+
+            if (enemyFSM.Parameter.enemyType == EnemyType.Goblin)
+            {
+                enemyFSM.Parameter.is_Ranged_Attack = true;
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && enemyFSM.Parameter.enemyType == EnemyType.Goblin)
         {
-            enemyFSM.Parameter.target = null;
+            enemyFSM.Parameter.is_Ranged_Attack = false;
         }
     }
 }

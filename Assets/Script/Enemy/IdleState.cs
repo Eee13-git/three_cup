@@ -175,6 +175,9 @@ public class ChaseState : IState
     //获取设置的属性
     private Parameter parameter;
 
+    //炸弹释放间隔计时器
+    private float timer = 0f;
+
     //构造函数
     public ChaseState(FSM manager)
     {
@@ -189,6 +192,8 @@ public class ChaseState : IState
 
     public void OnUpdate()
     {
+        timer += Time.deltaTime;
+
         //如果受伤
         if (parameter.getHit == true)
         {
@@ -196,15 +201,14 @@ public class ChaseState : IState
         }
 
         if (parameter.target == null ||
-            parameter.target.position.x < parameter.chasePoints[0].x ||
-            parameter.target.transform.position.x > parameter.chasePoints[1].x)
+            manager.transform.position.x < parameter.chasePoints[0].x ||
+            manager.transform.position.x > parameter.chasePoints[1].x)
         {
             parameter.target = null;
             manager.TransitionState(StateType.Idle);
         }
         else
         {
-
             manager.FlipTo(parameter.target.position);
 
             if (parameter.target)
@@ -213,7 +217,22 @@ public class ChaseState : IState
 
             if (Physics2D.OverlapCircle(parameter.attackPoint.position, parameter.attackArea, parameter.targetLayer))
             {
+                
                 manager.TransitionState(StateType.Attack);
+            }
+
+            //远程攻击
+            if (timer >= 3)
+            {
+                timer = 0;
+                if (parameter.is_Ranged_Attack && parameter.enemyType == EnemyType.Goblin)
+                {
+                    manager.TransitionState(StateType.RangedAttack);
+                    //Debug.Log("进入远程攻击");
+                    //调用扔炸弹
+
+                    return;
+                }
             }
         }
     }
@@ -299,5 +318,51 @@ public class DieState : IState
     public void OnExit()
     {
 
+    }
+}
+
+
+
+
+public class RangedAttackState : IState
+{
+    //添加状态机的引用
+    private FSM manager;
+    //获取设置的属性
+    private Parameter parameter;
+
+    //存储 Animator（动画控制器）中当前状态的关键信息
+    private AnimatorStateInfo info;
+    //构造函数
+    public RangedAttackState(FSM manager)
+    {
+        this.manager = manager;
+        this.parameter = manager.Parameter;
+    }
+
+    public void OnEnter()
+    {
+            parameter.animator.Play("Attack_Boom");
+
+    }
+
+    public void OnUpdate()
+    {
+        //如果受伤
+        if (parameter.getHit == true)
+        {
+            manager.TransitionState(StateType.Hurt);
+        }
+
+        info = parameter.animator.GetCurrentAnimatorStateInfo(0);
+
+        if(info.normalizedTime >= 0.95f)
+        {
+            manager.TransitionState(StateType.Chase);
+        }
+    }
+
+    public void OnExit()
+    {
     }
 }

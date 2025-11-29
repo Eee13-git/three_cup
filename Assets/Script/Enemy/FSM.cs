@@ -9,7 +9,7 @@ using UnityEngine;
 //状态枚举
 public enum StateType
 {
-    Idle, Patrol, Chase, Attack, Hurt, Die
+    Idle, Patrol, Chase, Attack, Hurt, Die,RangedAttack
 }
 
 public enum EnemyType
@@ -52,7 +52,8 @@ public class Parameter
 
     //用于模拟敌人受到攻击
     public bool getHit;
-    //
+    //用于指示是否可以远程攻击
+    public bool is_Ranged_Attack;
 
 
     //获取动画器组件
@@ -97,7 +98,9 @@ public class FSM : MonoBehaviour
         states.Add(StateType.Patrol, new PatrolState(this));
         states.Add(StateType.Chase, new ChaseState(this));
         states.Add(StateType.Hurt, new HurtState(this));
-        states.Add(StateType.Die, new DieState(this));
+        states.Add(StateType.Die, new DieState(this)); 
+        states.Add(StateType.RangedAttack, new RangedAttackState(this));
+
 
         //设置初始状态值
         TransitionState(StateType.Idle);
@@ -167,7 +170,7 @@ public class FSM : MonoBehaviour
             Gizmos.color = Color.blue;
             foreach (var point in Parameter.patrolPoints)
             {
-                Gizmos.DrawSphere(point, 0.05f); // 巡逻点大小0.2
+                Gizmos.DrawSphere(point, 0.05f); // 巡逻点大小
             }
         }
 
@@ -177,7 +180,7 @@ public class FSM : MonoBehaviour
             Gizmos.color = Color.red;
             foreach (var point in Parameter.chasePoints)
             {
-                Gizmos.DrawSphere(point, 0.05f); // 追击点稍大0.3，区分巡逻点
+                Gizmos.DrawSphere(point, 0.05f); // 追击点
             }
         }
     }
