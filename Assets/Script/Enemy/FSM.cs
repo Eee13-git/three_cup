@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using Unity.Mathematics;
 using UnityEngine;
 
 
@@ -14,7 +15,7 @@ public enum StateType
 
 public enum EnemyType
 {
-    Skeleton, Goblin
+    Skeleton, Goblin, Skeleton2
 }
 
 //让编译器序列化这个类,作用是在监视面板看到并编辑参数
@@ -54,10 +55,21 @@ public class Parameter
     public bool getHit;
     //用于指示是否可以远程攻击
     public bool is_Ranged_Attack;
+    //用于指示是否弹反了
+    public bool is_Shield;
+
 
 
     //获取动画器组件
     public Animator animator;
+
+
+    // 新增：炸弹核心参数（适配简化后的Boom脚本）
+    [Header("哥布林炸弹参数")] // 分组显示，方便Inspector编辑
+    public GameObject bombPrefab;        // 炸弹预制体（拖入你的炸弹Prefab）
+    public Transform bombSpawnPoint;     // 炸弹生成点（哥布林手部空物体）
+    public float bombMoveSpeed = 6f;     // 炸弹移动速度（默认6单位/秒）
+    public int bombDamage = 1;          // 炸弹伤害（默认10点）
 }
 
 
@@ -111,13 +123,13 @@ public class FSM : MonoBehaviour
     void Update()
     {
         currentState.OnUpdate();
-        /*
+        
         //测试受伤
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            GetHurt(1);
+            GetHurt(1f);
         }
-        */
+        
     }
 
     //切换状态
@@ -149,10 +161,26 @@ public class FSM : MonoBehaviour
     //受伤函数
     public void GetHurt(float Attack) //输入攻击力
     {
-        Parameter.getHit = true;
-        Parameter.health -= Attack;
+        if (Parameter.enemyType == EnemyType.Skeleton2)
+        {
+            float x = UnityEngine.Random.value;
+            if(x <= 0.4)
+            {
+                Parameter.is_Shield = true;
+                Parameter.getHit = true;
+            }
+            else
+            {
+                Parameter.getHit = true;
+                Parameter.health -= Attack;
+            }
+        }
+        else
+        {
+            Parameter.getHit = true;
+            Parameter.health -= Attack;
+        }
     }
-
 
     //检测攻击距离绘画图像
     private void OnDrawGizmos()

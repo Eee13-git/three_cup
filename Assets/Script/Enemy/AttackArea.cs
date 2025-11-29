@@ -26,10 +26,11 @@ public class AttackArea : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             //添加攻击角色代码
-            Debug.Log(other.name);
-
+            Debug.Log("打到了玩家");
+            
             player = other.GetComponent<PlayerController>();
             player.PlayerHurt(enemyFSM.Parameter.attack);
+            
         }
     }
 }

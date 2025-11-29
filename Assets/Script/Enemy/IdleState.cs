@@ -24,6 +24,7 @@ public class IdleState : IState
     public void OnEnter()
     {
         parameter.animator.Play("Idle");
+        parameter.idleTime = 4 * Random.value;
     }
 
     public void OnUpdate()
@@ -262,10 +263,17 @@ public class HurtState : IState
 
     public void OnEnter()
     {
-        parameter.animator.Play("Hurt");
-        Debug.Log("扣血");
+        if (parameter.is_Shield == true && parameter.enemyType == EnemyType.Skeleton2) 
+        {
+            parameter.animator.Play("Shield");
+            Debug.Log("弹反");
+        }
+        else
+        {
+            parameter.animator.Play("Hurt");
+            Debug.Log("扣血");
+        }
     }
-
     public void OnUpdate()
     {
         info = parameter.animator.GetCurrentAnimatorStateInfo(0);
@@ -286,6 +294,7 @@ public class HurtState : IState
     public void OnExit()
     {
         parameter.getHit = false;
+        parameter.is_Shield = false;
     }
 }
 
@@ -333,6 +342,10 @@ public class RangedAttackState : IState
 
     //存储 Animator（动画控制器）中当前状态的关键信息
     private AnimatorStateInfo info;
+
+    private bool hasSpawnedBomb = false; // 避免重复生成炸弹
+
+
     //构造函数
     public RangedAttackState(FSM manager)
     {
@@ -342,8 +355,8 @@ public class RangedAttackState : IState
 
     public void OnEnter()
     {
-            parameter.animator.Play("Attack_Boom");
-
+        hasSpawnedBomb = false;
+        parameter.animator.Play("Attack_Boom");
     }
 
     public void OnUpdate()
@@ -358,11 +371,66 @@ public class RangedAttackState : IState
 
         if(info.normalizedTime >= 0.95f)
         {
+            if (!hasSpawnedBomb)
+            {
+                //调用生成炸弹逻辑
+                SpawnBomb();
+                hasSpawnedBomb = true;
+            }
+
             manager.TransitionState(StateType.Chase);
         }
     }
 
     public void OnExit()
     {
+
     }
+
+    private void SpawnBomb()
+    {
+        // 空引用校验（避免报错）
+        if (parameter.bombPrefab == null)
+        {
+            Debug.LogError("哥布林未配置炸弹预制体！", manager.gameObject);
+            return;
+        }
+        if (parameter.bombSpawnPoint == null)
+        {
+            Debug.LogError("哥布林未配置炸弹生成点！", manager.gameObject);
+            return;
+        }
+        if (parameter.target == null)
+        {
+            Debug.LogError("哥布林未检测到玩家！", manager.gameObject);
+            return;
+        }
+
+        // 1. 生成炸弹预制体
+        GameObject boomObj = Object.Instantiate(
+            parameter.bombPrefab,                // 炸弹预制体
+            parameter.bombSpawnPoint.position,   // 生成位置（哥布林手部）
+            Quaternion.identity                  // 无旋转
+        );
+
+        // 2. 获取Boom组件并调用Init初始化
+        Boom boom = boomObj.GetComponent<Boom>();
+        if (boom != null)
+        {
+            // 计算炸弹朝向：从生成点指向玩家
+            Vector3 directionToPlayer = parameter.target.position - parameter.bombSpawnPoint.position;
+            // 调用Init：传入方向、速度、伤害（适配简化后的Boom脚本）
+            boom.Init(
+                directionToPlayer,
+                parameter.bombMoveSpeed,
+                parameter.bombDamage
+            );
+        }
+        else
+        {
+            Debug.LogError("炸弹预制体未挂载Boom脚本！", boomObj);
+            boomObj.GetComponent<Boom>().DestroySelf();
+        }
+    }
+
 }
