@@ -31,4 +31,12 @@ public class Area : MonoBehaviour
             enemyFSM.Parameter.target = other.transform;
         }
     }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            enemyFSM.Parameter.target = null;
+        }
+    }
 }

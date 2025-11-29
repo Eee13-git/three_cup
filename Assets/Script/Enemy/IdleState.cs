@@ -39,8 +39,8 @@ public class IdleState : IState
 
         //如果看到玩家
         if (parameter.target != null &&
-            parameter.target.position.x >= parameter.chasePoints[0].position.x &&
-            parameter.target.position.x <= parameter.chasePoints[1].position.x)
+            parameter.target.position.x >= parameter.chasePoints[0].x &&
+            parameter.target.position.x <= parameter.chasePoints[1].x)
         {
             manager.TransitionState(StateType.Chase);
         }
@@ -137,8 +137,8 @@ public class PatrolState : IState
 
         //如果看到玩家
         if (parameter.target != null &&
-        parameter.target.position.x >= parameter.chasePoints[0].position.x &&
-        parameter.target.position.x <= parameter.chasePoints[1].position.x)
+        parameter.target.position.x >= parameter.chasePoints[0].x &&
+        parameter.target.position.x <= parameter.chasePoints[1].x)
         {
             manager.TransitionState(StateType.Chase);
         }
@@ -147,9 +147,9 @@ public class PatrolState : IState
         manager.FlipTo(parameter.patrolPoints[patrolPosition]);
         //从现位置到巡逻点位置，以一定速度移动的函数
         manager.transform.position = Vector2.MoveTowards(manager.transform.position,
-            parameter.patrolPoints[patrolPosition].position, parameter.moveSpeed * Time.deltaTime);
+            parameter.patrolPoints[patrolPosition], parameter.moveSpeed * Time.deltaTime);
         //接近巡逻点时切换状态
-        if(Vector2.Distance(manager.transform.position, parameter.patrolPoints[patrolPosition].position) < 0.2f)
+        if(Vector2.Distance(manager.transform.position, parameter.patrolPoints[patrolPosition]) < 0.2f)
         {
             manager.TransitionState(StateType.Idle);
         }
@@ -195,23 +195,28 @@ public class ChaseState : IState
             manager.TransitionState(StateType.Hurt);
         }
 
-        manager.FlipTo(parameter.target);
-
-        if (parameter.target)
-            manager.transform.position = Vector2.MoveTowards(manager.transform.position,
-            parameter.target.position, parameter.chaseSpeed * Time.deltaTime);
-        if(parameter.target == null ||
-            manager.transform.position.x < parameter.chasePoints[0].position.x ||
-            manager.transform.position.x > parameter.chasePoints[1].position.x)
+        if (parameter.target == null ||
+            parameter.target.position.x < parameter.chasePoints[0].x ||
+            parameter.target.transform.position.x > parameter.chasePoints[1].x)
         {
+            parameter.target = null;
             manager.TransitionState(StateType.Idle);
         }
-        if(Physics2D.OverlapCircle(parameter.attackPoint.position, parameter.attackArea, parameter.targetLayer))
+        else
         {
-            manager.TransitionState(StateType.Attack);
+
+            manager.FlipTo(parameter.target.position);
+
+            if (parameter.target)
+                manager.transform.position = Vector2.MoveTowards(manager.transform.position,
+                parameter.target.position, parameter.chaseSpeed * Time.deltaTime);
+
+            if (Physics2D.OverlapCircle(parameter.attackPoint.position, parameter.attackArea, parameter.targetLayer))
+            {
+                manager.TransitionState(StateType.Attack);
+            }
         }
     }
-
     public void OnExit()
     {
 
@@ -240,7 +245,6 @@ public class HurtState : IState
     {
         parameter.animator.Play("Hurt");
         Debug.Log("扣血");
-        parameter.health--;
     }
 
     public void OnUpdate()
