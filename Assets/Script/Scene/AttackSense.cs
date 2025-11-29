@@ -25,7 +25,7 @@ public class AttackSense : MonoBehaviour
 
     IEnumerator Pause(int duration)
     {
-        float pauseTime = duration / 60f;
+        float pauseTime = duration / 50f;
         Time.timeScale = 0;
         // 使用不受 timeScale 影响的等待
         yield return new WaitForSecondsRealtime(pauseTime);

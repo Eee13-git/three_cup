@@ -20,7 +20,7 @@ public class CameraFollow : MonoBehaviour
 
     void Start()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 50;
         // 尝试在启动时查找 Player（如果未在 Inspector 指定）
         if (Player == null)
         {

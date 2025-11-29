@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [Header("角色属性面板")]
     [SerializeField]
     private float Health;
+    private float MaxHealth;
     [SerializeField]
     private float AttackStrength;
     [SerializeField]
@@ -54,11 +55,13 @@ public class PlayerController : MonoBehaviour
     private bool isGround;
 
     // Start is called before the first frame update
+
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
         playerAnim = GetComponent<Animator>();
         playerFeet = GetComponent<CircleCollider2D>();
+        cdImage = GameObject.Find("Dash").GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -259,7 +262,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PlayerHurt(int damage)
+    public void PlayerHurt(float damage)
     {
         Health -= damage;
         if (Health>0)
@@ -269,7 +272,15 @@ public class PlayerController : MonoBehaviour
         if (Health <= 0)
         {
             playerAnim.SetBool("Die",true);
-            //玩家死亡的函数(待写)
+            //玩家重生
+            Invoke("PlayerReburn",2);
         }
+    }
+
+    private void PlayerReburn()
+    {
+        playerAnim.SetBool("Die", false);
+        this.transform.position = PlayerInfo.Instance.lastPoint;
+        Health = MaxHealth;
     }
 }
