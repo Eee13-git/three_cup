@@ -7,6 +7,8 @@ public class AttackArea : MonoBehaviour
     [SerializeField]
     private FSM enemyFSM;
 
+    private PlayerController player;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +27,9 @@ public class AttackArea : MonoBehaviour
         {
             //Ìí¼Ó¹¥»÷½ÇÉ«´úÂë
             Debug.Log("¹¥»÷µ½player");
+
+            player = other.GetComponent<PlayerController>();
+            player.PlayerHurt(enemyFSM.Parameter.attack);
         }
     }
 }

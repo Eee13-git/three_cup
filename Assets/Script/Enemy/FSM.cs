@@ -22,7 +22,8 @@ public enum EnemyType
 //声明敌人参数
 public class Parameter
 {
-    public int health = 3;
+    public float health = 3f;
+    public float attack = 1f;
     public float moveSpeed = 0.5f;
     public float chaseSpeed = 1.5f;
     public float idleTime = 2f;
@@ -142,7 +143,7 @@ public class FSM : MonoBehaviour
 
 
     //受伤函数
-    public void GetHurt(int Attack) //输入攻击力
+    public void GetHurt(float Attack) //输入攻击力
     {
         Parameter.getHit = true;
         Parameter.health -= Attack;
