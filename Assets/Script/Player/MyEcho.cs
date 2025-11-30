@@ -146,5 +146,12 @@ public class MyEcho : MonoBehaviour
             FSM fsm = other.GetComponent<FSM>();
             fsm.GetHurt(AttackStrength);
         }
+        if (other.CompareTag("Boss"))
+        {
+            boss boss_1 = other.GetComponent<boss>();
+            boss_1.GetHurt(AttackStrength);
+            AttackSense.Instance.HitPause(lightPause);
+            AttackSense.Instance.CameraShake(shakeTime, lightStrength);
+        }
     }
 }

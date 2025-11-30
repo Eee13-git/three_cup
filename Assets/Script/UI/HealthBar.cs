@@ -8,12 +8,15 @@ public class HealthBar : MonoBehaviour
     public Text attackText;
     public Text criticalText;
 
+    public Text DieCountText;
 
     public static float HealthCureent;
     public static float HealthMax;
 
     public static float attackStrength;
     public static float criticalRate;
+
+    public static float DieCount;
 
     private float crRate;
 
@@ -35,5 +38,7 @@ public class HealthBar : MonoBehaviour
         attackText.text = "Strength   " + attackStrength.ToString();
         crRate = criticalRate*100;
         criticalText.text = "Critical Rate  " + crRate.ToString() + "%";
+
+        DieCountText.text = "Die Count : " + DieCount.ToString();
     }
 }

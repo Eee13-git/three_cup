@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour
     private  float CriticalRate;
     [SerializeField]
     public float DieTime;
+
+    public int DieCount=0;
+
     [Header("补偿速度")]
     public float lightSpeed;
 
@@ -34,11 +37,12 @@ public class PlayerController : MonoBehaviour
     public float dashTime;//dash时长
     private float dashTimeLeft;//dash剩余时间
     private float lastDash=-10f;//上次dash的时间点
-
     public  float dashCoolDown;
-
     public float dashSpeed;
     public bool isDashing;
+    [Header("Defend参数")]
+    public float defendCoolDown;
+    private float lastDefend = -10f;//上次dash的时间点
     [Space]
 
     private static bool isFirst = true;
@@ -47,7 +51,7 @@ public class PlayerController : MonoBehaviour
     
     public static int echoCount = 2;
     
-
+    
 
     private MyEcho echo;
 
@@ -243,8 +247,11 @@ public class PlayerController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.E) && !isAttack&&!isDefend)
         {
-            isDefend = true;
-            playerAnim.SetTrigger("Defend");
+            if (Time.time-lastDefend>=defendCoolDown) {
+                isDefend = true;
+                playerAnim.SetTrigger("Defend");
+                lastDefend = Time.time;
+            }
         }
     }
 
@@ -270,6 +277,7 @@ public class PlayerController : MonoBehaviour
         cdImage.fillAmount = 1.0f;
     }
 
+   
     void DashAct()
     {
         if (isDashing)
@@ -333,14 +341,34 @@ public class PlayerController : MonoBehaviour
             if (randomValue<=CriticalRate) {
                fsm.GetHurt(AttackStrength*1.5f);
             }
-            fsm.GetHurt(AttackStrength);
+            else fsm.GetHurt(AttackStrength);
+            if (isDefend)
+            {
+                Debug.Log("防御格挡");
+                playerAnim.SetTrigger("Defend_2");
+                isDefend = false;
+            }
 
         }
-        if (isDefend)
+        if (other.CompareTag("Boss"))
         {
-            playerAnim.SetTrigger("Defend_2");
-            isDefend = false;
+            boss boss_1=other.GetComponent<boss>();
+
+            float randomValue = Random.Range(0f, 1f);
+
+            if (randomValue <= CriticalRate)
+                boss_1.GetHurt(AttackStrength*1.5f);
+            else boss_1.GetHurt(AttackStrength);
+            AttackSense.Instance.HitPause(lightPause);
+            AttackSense.Instance.CameraShake(shakeTime, lightStrength);
+            if (isDefend)
+            {
+                Debug.Log("防御格挡");
+                playerAnim.SetTrigger("Defend_2");
+                isDefend = false;
+            }
         }
+        
     }
 
     public void PlayerHurt(float damage)
@@ -349,6 +377,7 @@ public class PlayerController : MonoBehaviour
         
         if (Health>0&&!isDefend)
         {
+            isAttack = false;
             playerAnim.SetTrigger("Hurt");
             Health -= damage;
         }
@@ -360,18 +389,24 @@ public class PlayerController : MonoBehaviour
             //玩家重生
             isInputEnabled = false;
             Invoke("PlayerReburn",DieTime);
+            DieCount++;
+            HealthBar.DieCount = DieCount;
         }
         HealthBar.HealthCureent = Health;
     }
 
     private void PlayerReburn()
-    {
+    {/*
         isDead = false;
         playerAnim.Play("Player_Idle");
         this.transform.position = PlayerInfo.Instance.lastPoint;
         Health = MaxHealth;
         HealthBar.HealthCureent = Health;
         isInputEnabled = true;
+        */
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        Health = MaxHealth;
+        HealthBar.HealthCureent = Health;
     }
 
     public void AddMaxHealth(float health)
@@ -395,7 +430,8 @@ public class PlayerController : MonoBehaviour
     }
     public void reduceDashCoolDown(float cd)
     {
-        dashCoolDown *= cd;
+        dashCoolDown *=(1- cd);
+        defendCoolDown *=(1-cd);
     }
     public void InitEcho()
     {

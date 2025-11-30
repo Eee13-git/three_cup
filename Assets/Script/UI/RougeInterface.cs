@@ -15,6 +15,8 @@ public class RougeInterface : MonoBehaviour
 
     public BoxCollider2D boxCollider2D;
 
+    private static int rewardSceneIndex = 0;
+
     IEnumerator ShowPanel(GameObject gameObject)
     {
         float timer = 0f;
@@ -69,8 +71,11 @@ public class RougeInterface : MonoBehaviour
         if (other.CompareTag("Player")
             && other.GetType().ToString() == "UnityEngine.CapsuleCollider2D")
         {
-            IsShowed(true);
-            boxCollider2D.enabled = false;
+            if (rewardSceneIndex < SceneManager.GetActiveScene().buildIndex) {
+                IsShowed(true);
+                boxCollider2D.enabled = false;
+                rewardSceneIndex++;
+            }
         }
     }
 

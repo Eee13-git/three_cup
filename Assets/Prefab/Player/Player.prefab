@@ -298,11 +298,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4058b5d04ca8074f9d44169241f490c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 40
-  MaxHealth: 40
-  AttackStrength: 12
-  CriticalRate: 0.4
+  Health: 220
+  MaxHealth: 220
+  AttackStrength: 10
+  CriticalRate: 0.2
   DieTime: 3
+  DieCount: 0
   lightSpeed: 0.5
   shakeTime: 0.1
   lightPause: 6
@@ -312,6 +313,7 @@ MonoBehaviour:
   dashCoolDown: 1
   dashSpeed: 10
   isDashing: 0
+  defendCoolDown: 3
   runSpeed: 2
   jumpSpeed: 3
   interval: 1
