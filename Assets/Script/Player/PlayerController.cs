@@ -395,7 +395,7 @@ public class PlayerController : MonoBehaviour
     }
     public void reduceDashCoolDown(float cd)
     {
-        dashCoolDown -= cd;
+        dashCoolDown *= cd;
     }
     public void InitEcho()
     {
