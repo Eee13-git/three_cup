@@ -9,12 +9,13 @@ public class MyEcho : MonoBehaviour
     [SerializeField]
     private float recordInterval = 0.02f; // ¼ÇÂ¼¼ä¸ô50Ö¡
     [SerializeField]
-    private float targetDelay = 1f;
+    public float targetDelay = 0.5f;
     private float lastRecordTime = 0f;
 
     [SerializeField]
     private GameObject player;
     [SerializeField]
+    
     private Animator playerAnimator;
     [SerializeField]
     private BoxCollider2D playerAttackArea;
@@ -57,6 +58,7 @@ public class MyEcho : MonoBehaviour
         {
             transform.SetParent(null, true);
         }
+        
         playerController = player.GetComponent<PlayerController>();
     }
 

@@ -9,13 +9,13 @@ public class PlayerController : MonoBehaviour
 
     [Header("角色属性面板")]
     [SerializeField]
-    private float Health;
+    private  float Health;
     [SerializeField]
-    private float MaxHealth;
+    private  float MaxHealth;
     [SerializeField]
-    private float AttackStrength;
+    private  float AttackStrength;
     [SerializeField]
-    private float CriticalRate;
+    private  float CriticalRate;
     [SerializeField]
     public float DieTime;
     [Header("补偿速度")]
@@ -34,10 +34,23 @@ public class PlayerController : MonoBehaviour
     public float dashTime;//dash时长
     private float dashTimeLeft;//dash剩余时间
     private float lastDash=-10f;//上次dash的时间点
-    public float dashCoolDown;
+
+    public  float dashCoolDown;
+
     public float dashSpeed;
     public bool isDashing;
     [Space]
+
+    private static bool isFirst = true;
+
+    [Header("Echo")]
+    
+    public static int echoCount = 2;
+    
+
+
+    private MyEcho echo;
+
     private float moveDir;//移动方向
 
     public float runSpeed = 2.0f;
@@ -66,12 +79,27 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        updateUI();
+        if (isFirst)
+        {
+           updateUI();
+           isFirst = false;
+        }
+        else
+        {
+            MaxHealth= HealthBar.HealthMax;
+            Health = HealthBar.HealthCureent;
+            AttackStrength = HealthBar.attackStrength;
+            CriticalRate = HealthBar.criticalRate;
+            Health = MaxHealth;
+        }
+
 
         playerRigidbody = GetComponent<Rigidbody2D>();
         playerAnim = GetComponent<Animator>();
         playerFeet = GetComponent<CircleCollider2D>();
         cdImage = GameObject.Find("Dash").GetComponent<Image>();
+
+        
     }
 
     // Update is called once per frame
@@ -344,4 +372,33 @@ public class PlayerController : MonoBehaviour
         HealthBar.HealthCureent = Health;
         isInputEnabled = true;
     }
+
+    public void AddMaxHealth(float health)
+    {
+        MaxHealth += health;
+        Health = MaxHealth;
+        HealthBar.HealthMax = MaxHealth;
+        HealthBar.HealthCureent = Health;
+    }
+    public void AddAttackStrength(int strength)
+    {
+        AttackStrength += strength;
+        HealthBar.attackStrength = AttackStrength;
+    }
+    public void AddCriticalRate(float rate)
+    {
+        CriticalRate += rate;
+        if (CriticalRate > 1f)
+            CriticalRate = 1f;
+        HealthBar.criticalRate = CriticalRate;
+    }
+    public void reduceDashCoolDown(float cd)
+    {
+        dashCoolDown -= cd;
+    }
+    public void InitEcho()
+    {
+    
+    }
+
 }
