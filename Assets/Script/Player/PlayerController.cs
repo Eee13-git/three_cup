@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
     private static bool isFirst = true;
 
     [Header("Echo")]
-    public int echoCount = 0;
+    public static int echoCount = 0;
     [Space]
     public GameObject Echo_0;
     public GameObject Echo_1;
@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         Debug.Log("初始化数量"+echoCount);
+        
     }
     void Start()
     {
@@ -446,30 +447,47 @@ public class PlayerController : MonoBehaviour
     }
     public void InitEcho()
     {
-        Debug.Log("qiyong");
+        //Debug.Log("qiyong");
         echoCount++;
-        Debug.Log("Init" + echoCount);
+        //Debug.Log("Init" + echoCount);
         SetEchoActive();
-
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
     void SetEchoActive()
     {
-        Debug.Log("Set" + echoCount);
+        //Debug.Log("Set" + echoCount);
         switch (echoCount)
         {
+            case 0:
+                Echo_0.SetActive(true);
+                Echo_1.SetActive(false);
+                Echo_2.SetActive(false);
+                Echo_3.SetActive(false);
+                Echo_4.SetActive(false);
+                break;
             case 1:
+                Echo_0.SetActive(true);
                 Echo_1.SetActive(true);
+                Echo_2.SetActive(false);
+                Echo_3.SetActive(false);
+                Echo_4.SetActive(false);
                 break;
             case 2:
+                Echo_0.SetActive(true);
                 Echo_1.SetActive(true);
                 Echo_2.SetActive(true);
+                Echo_3.SetActive(false);
+                Echo_4.SetActive(false);
                 break;
             case 3:
+                Echo_0.SetActive(true);
                 Echo_1.SetActive(true);
                 Echo_2.SetActive(true);
                 Echo_3.SetActive(true);
+                Echo_4.SetActive(false);
                 break;
             case 4:
+                Echo_0.SetActive(true);
                 Echo_1.SetActive(true);
                 Echo_2.SetActive(true);
                 Echo_3.SetActive(true);
@@ -479,6 +497,13 @@ public class PlayerController : MonoBehaviour
                 return;
 
         }
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+
+        //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ResetEcho()
+    {
+        echoCount = 0;
+        
     }
 }

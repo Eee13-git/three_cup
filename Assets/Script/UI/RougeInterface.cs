@@ -15,7 +15,7 @@ public class RougeInterface : MonoBehaviour
 
     public BoxCollider2D boxCollider2D;
 
-    private static int rewardSceneIndex = 0;
+    public static int rewardSceneIndex = 0;
 
     IEnumerator ShowPanel(GameObject gameObject)
     {
@@ -55,17 +55,7 @@ public class RougeInterface : MonoBehaviour
             isPanelActive = false;
         }
     }
-    //void Start()
-    //{
-    //    // 防止运行时某个 Button 被选中，从而按空格触发它
-    //    if (EventSystem.current != null)
-    //    {
-    //        EventSystem.current.SetSelectedGameObject(null);
-    //    }
-
-    //    IsShowed(true);
-    //}
-
+   
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player")
@@ -77,6 +67,10 @@ public class RougeInterface : MonoBehaviour
                 rewardSceneIndex++;
             }
         }
+    }
+    public int GetRewardSceneIndex()
+    {
+        return rewardSceneIndex;
     }
 
 }
