@@ -202,9 +202,15 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 512
     attackPoint: {fileID: 7380544339501865330}
-    attackArea: 0.2
+    attackArea: 0.17
     getHit: 0
+    is_Ranged_Attack: 0
+    is_Shield: 0
     animator: {fileID: 0}
+    bombPrefab: {fileID: 0}
+    bombSpawnPoint: {fileID: 0}
+    bombMoveSpeed: 6
+    bombDamage: 1
 --- !u!1 &8521693026439107575
 GameObject:
   m_ObjectHideFlags: 0
