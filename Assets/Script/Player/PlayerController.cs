@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,15 +44,16 @@ public class PlayerController : MonoBehaviour
     [Header("Defend参数")]
     public float defendCoolDown;
     private float lastDefend = -10f;//上次dash的时间点
-    [Space]
+    
 
     private static bool isFirst = true;
 
     [Header("Echo")]
-    
-    public static int echoCount = 2;
-    
-    
+    public int echoCount = 0;
+    [Space]
+    private List<GameObject> echoList = new List<GameObject>(); // 存储所有Echo子物体
+
+
 
     private MyEcho echo;
 
@@ -103,7 +105,10 @@ public class PlayerController : MonoBehaviour
         playerFeet = GetComponent<CircleCollider2D>();
         cdImage = GameObject.Find("Dash").GetComponent<Image>();
 
-        
+        CollectAndSortEchos();
+        //echoList[0].SetActive(true);
+        UpdateEchoActivation();
+
     }
 
     // Update is called once per frame
@@ -435,7 +440,42 @@ public class PlayerController : MonoBehaviour
     }
     public void InitEcho()
     {
-    
+        echoCount++;
+
+        //CollectAndSortEchos();
+        Debug.Log("Echo数量：" + echoList.Count);
+        Debug.Log("启用Echo索引：" + echoCount);
+        echoList[echoCount].SetActive(true);
     }
 
+    void CollectAndSortEchos()
+    {
+        echoList.Clear();
+        // 遍历直接子物体，筛选名称包含"Echo"的同类物体
+        foreach (Transform child in transform)
+        {
+            if (child.name.Contains("Echo")) // 简单匹配，可根据实际名称调整
+            {
+                echoList.Add(child.gameObject);
+                Debug.Log("找到Echo子物体: " + child.name);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 根据echoCount启用前N个Echo，其余禁用
+    /// </summary>
+    public void UpdateEchoActivation()
+    {
+        // 安全校验：限制数量在有效范围内（1到总数量）
+        //int maxCount = echoList.Count;
+        //echoCount = Mathf.Clamp(echoCount, 0, maxCount);
+
+        // 启用前echoCount个，其余保持禁用
+        for (int i = 0; i < echoCount; i++)
+        {
+
+           echoList[i].SetActive(true);
+        }
+    }
 }

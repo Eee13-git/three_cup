@@ -60,7 +60,7 @@ public class MyEcho : MonoBehaviour
         }
         
         playerController = player.GetComponent<PlayerController>();
-        AttackStrength = playerController.AttackStrength;
+        AttackStrength = playerController.AttackStrength*0.5f;
     }
 
     void Start()

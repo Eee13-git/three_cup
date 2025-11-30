@@ -124,8 +124,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3529629474788138923, guid: 620cffb89bcef2a4b8f15170a5dac509, type: 3}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: reduceDashCoolDown
-        m_Mode: 4
+        m_MethodName: InitEcho
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
