@@ -45,14 +45,17 @@ public class PlayerController : MonoBehaviour
     public float defendCoolDown;
     private float lastDefend = -10f;//上次dash的时间点
     
-
+    
     private static bool isFirst = true;
 
     [Header("Echo")]
     public int echoCount = 0;
     [Space]
-    private List<GameObject> echoList = new List<GameObject>(); // 存储所有Echo子物体
-
+    public GameObject Echo_0;
+    public GameObject Echo_1;
+    public GameObject Echo_2;
+    public GameObject Echo_3;
+    public GameObject Echo_4;
 
 
     private MyEcho echo;
@@ -82,7 +85,10 @@ public class PlayerController : MonoBehaviour
     private bool isGround;
 
     // Start is called before the first frame update
-
+    private void Awake()
+    {
+        Debug.Log("初始化数量"+echoCount);
+    }
     void Start()
     {
         if (isFirst)
@@ -105,9 +111,7 @@ public class PlayerController : MonoBehaviour
         playerFeet = GetComponent<CircleCollider2D>();
         cdImage = GameObject.Find("Dash").GetComponent<Image>();
 
-        CollectAndSortEchos();
-        //echoList[0].SetActive(true);
-        UpdateEchoActivation();
+        SetEchoActive();
 
     }
 
@@ -126,6 +130,8 @@ public class PlayerController : MonoBehaviour
             Dash();
         }
         cdImage.fillAmount -= 1.0f/dashCoolDown*Time.deltaTime;
+
+        //Debug.Log("后来数量" + echoCount);
     }
 
     public void updateUI()
@@ -440,42 +446,39 @@ public class PlayerController : MonoBehaviour
     }
     public void InitEcho()
     {
+        Debug.Log("qiyong");
         echoCount++;
+        Debug.Log("Init" + echoCount);
+        SetEchoActive();
 
-        //CollectAndSortEchos();
-        Debug.Log("Echo数量：" + echoList.Count);
-        Debug.Log("启用Echo索引：" + echoCount);
-        echoList[echoCount].SetActive(true);
     }
-
-    void CollectAndSortEchos()
+    void SetEchoActive()
     {
-        echoList.Clear();
-        // 遍历直接子物体，筛选名称包含"Echo"的同类物体
-        foreach (Transform child in transform)
+        Debug.Log("Set" + echoCount);
+        switch (echoCount)
         {
-            if (child.name.Contains("Echo")) // 简单匹配，可根据实际名称调整
-            {
-                echoList.Add(child.gameObject);
-                Debug.Log("找到Echo子物体: " + child.name);
-            }
+            case 1:
+                Echo_1.SetActive(true);
+                break;
+            case 2:
+                Echo_1.SetActive(true);
+                Echo_2.SetActive(true);
+                break;
+            case 3:
+                Echo_1.SetActive(true);
+                Echo_2.SetActive(true);
+                Echo_3.SetActive(true);
+                break;
+            case 4:
+                Echo_1.SetActive(true);
+                Echo_2.SetActive(true);
+                Echo_3.SetActive(true);
+                Echo_4.SetActive(true);
+                break;
+            default:
+                return;
+
         }
-    }
-
-    /// <summary>
-    /// 根据echoCount启用前N个Echo，其余禁用
-    /// </summary>
-    public void UpdateEchoActivation()
-    {
-        // 安全校验：限制数量在有效范围内（1到总数量）
-        //int maxCount = echoList.Count;
-        //echoCount = Mathf.Clamp(echoCount, 0, maxCount);
-
-        // 启用前echoCount个，其余保持禁用
-        for (int i = 0; i < echoCount; i++)
-        {
-
-           echoList[i].SetActive(true);
-        }
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 }
