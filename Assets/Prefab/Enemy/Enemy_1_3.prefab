@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6164832237054757969}
   m_Layer: 10
   m_Name: Enemy_1_3
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 95
   m_Sprite: {fileID: 1055344256, guid: c8ce20c5f53d91f49baf98590babc630, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -193,6 +193,7 @@ MonoBehaviour:
     chaseSpeed: 1.5
     idleTime: 2
     enemyType: 0
+    is_Black: 0
     patrolPoints: []
     chasePoints: []
     patrolDistance: 1
@@ -423,4 +424,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f6ecaea97d132847a3260375bb67e4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyFSM: {fileID: 0}
+  enemyFSM: {fileID: 6164832237054757969}

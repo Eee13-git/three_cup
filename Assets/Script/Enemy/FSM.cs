@@ -133,10 +133,10 @@ public class FSM : MonoBehaviour
         currentState.OnUpdate();
         
         //≤‚ ‘ ‹…À
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            GetHurt(1f);
-        }
+        //if (Input.GetKeyDown(KeyCode.Return))
+        //{
+        //    GetHurt(1f);
+        //}
         
     }
 

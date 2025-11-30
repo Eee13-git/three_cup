@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private  float MaxHealth;
     [SerializeField]
-    private  float AttackStrength;
+    public  float AttackStrength;
     [SerializeField]
     private  float CriticalRate;
     [SerializeField]
@@ -314,7 +314,8 @@ public class PlayerController : MonoBehaviour
     //¹¥»÷¼ì²â
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy"))
+        FSM fsm = other.GetComponent<FSM>();
+        if (other.CompareTag("Enemy")&&!fsm.Parameter.is_Black)
         {
             //if (attackType == "Light")
             //{
@@ -323,7 +324,7 @@ public class PlayerController : MonoBehaviour
             //}
             //µÐÈËÊÜÉËµÄº¯Êý
             //Debug.Log("ÃüÖÐ");
-            FSM fsm = other.GetComponent<FSM>();
+           
 
 
             //±©»÷ÅÐ¶¨
@@ -346,7 +347,7 @@ public class PlayerController : MonoBehaviour
     {
         
         
-        if (Health>0)
+        if (Health>0&&!isDefend)
         {
             playerAnim.SetTrigger("Hurt");
             Health -= damage;
