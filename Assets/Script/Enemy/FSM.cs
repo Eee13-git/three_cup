@@ -32,6 +32,9 @@ public class Parameter
     //怪物种类
     public EnemyType enemyType = EnemyType.Skeleton;
 
+    //怪物是否黑化
+    public bool is_Black = false;
+
     //巡逻范围
     public Vector3[] patrolPoints;
     //追击范围
@@ -116,6 +119,11 @@ public class FSM : MonoBehaviour
 
         //设置初始状态值
         TransitionState(StateType.Idle);
+
+        if (Parameter.is_Black)
+        {
+            GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 1f, 1f);
+        }
 
     }
 

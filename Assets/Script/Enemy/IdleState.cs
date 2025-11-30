@@ -1,20 +1,21 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 
 public class IdleState : IState
 {
-    //Ìí¼Ó×´Ì¬»úµÄÒıÓÃ
+    //æ·»åŠ çŠ¶æ€æœºçš„å¼•ç”¨
     private FSM manager;
-    //»ñÈ¡ÉèÖÃµÄÊôĞÔ
+    //è·å–è®¾ç½®çš„å±æ€§
     private Parameter parameter;
 
 
-    //Á½¸öÑ²Âßµã£¬µ½µØ·½µÈÒ»¶ÎÊ±¼ä
+    //ä¸¤ä¸ªå·¡é€»ç‚¹ï¼Œåˆ°åœ°æ–¹ç­‰ä¸€æ®µæ—¶é—´
     private float timer;
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     public IdleState(FSM manager)
     {
         this.manager = manager;
@@ -31,14 +32,14 @@ public class IdleState : IState
     {
         timer += Time.deltaTime;
 
-        //Èç¹ûÊÜÉË
+        //å¦‚æœå—ä¼¤
         if(parameter.getHit == true)
         {
             manager.TransitionState(StateType.Hurt);
         }
 
 
-        //Èç¹û¿´µ½Íæ¼Ò
+        //å¦‚æœçœ‹åˆ°ç©å®¶
         if (parameter.target != null &&
             parameter.target.position.x >= parameter.chasePoints[0].x &&
             parameter.target.position.x <= parameter.chasePoints[1].x)
@@ -60,14 +61,14 @@ public class IdleState : IState
 
 public class AttackState : IState
 {
-    //Ìí¼Ó×´Ì¬»úµÄÒıÓÃ
+    //æ·»åŠ çŠ¶æ€æœºçš„å¼•ç”¨
     private FSM manager;
-    //»ñÈ¡ÉèÖÃµÄÊôĞÔ
+    //è·å–è®¾ç½®çš„å±æ€§
     private Parameter parameter;
 
-    //´æ´¢ Animator£¨¶¯»­¿ØÖÆÆ÷£©ÖĞµ±Ç°×´Ì¬µÄ¹Ø¼üĞÅÏ¢
+    //å­˜å‚¨ Animatorï¼ˆåŠ¨ç”»æ§åˆ¶å™¨ï¼‰ä¸­å½“å‰çŠ¶æ€çš„å…³é”®ä¿¡æ¯
     private AnimatorStateInfo info;
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     public AttackState(FSM manager)
     {
         this.manager = manager;
@@ -85,7 +86,7 @@ public class AttackState : IState
 
     public void OnUpdate()
     {
-        //Èç¹ûÊÜÉË
+        //å¦‚æœå—ä¼¤
         if (parameter.getHit == true)
         {
             manager.TransitionState(StateType.Hurt);
@@ -107,15 +108,15 @@ public class AttackState : IState
 
 public class PatrolState : IState
 {
-    //Ìí¼Ó×´Ì¬»úµÄÒıÓÃ
+    //æ·»åŠ çŠ¶æ€æœºçš„å¼•ç”¨
     private FSM manager;
-    //»ñÈ¡ÉèÖÃµÄÊôĞÔ
+    //è·å–è®¾ç½®çš„å±æ€§
     private Parameter parameter;
 
 
-    //ÏÂ±ê±íÊ¾Ñ²Âßµã
+    //ä¸‹æ ‡è¡¨ç¤ºå·¡é€»ç‚¹
     private int patrolPosition;
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     public PatrolState(FSM manager)
     {
         this.manager = manager;
@@ -130,13 +131,13 @@ public class PatrolState : IState
 
     public void OnUpdate()
     {
-        //Èç¹ûÊÜÉË
+        //å¦‚æœå—ä¼¤
         if (parameter.getHit == true)
         {
             manager.TransitionState(StateType.Hurt);
         }
 
-        //Èç¹û¿´µ½Íæ¼Ò
+        //å¦‚æœçœ‹åˆ°ç©å®¶
         if (parameter.target != null &&
         parameter.target.position.x >= parameter.chasePoints[0].x &&
         parameter.target.position.x <= parameter.chasePoints[1].x)
@@ -144,13 +145,13 @@ public class PatrolState : IState
             manager.TransitionState(StateType.Chase);
         }
 
-        //Ê¼ÖÕ³¯ÏòÑ²Âßµã
+        //å§‹ç»ˆæœå‘å·¡é€»ç‚¹
         manager.FlipTo(parameter.patrolPoints[patrolPosition]);
-        //´ÓÏÖÎ»ÖÃµ½Ñ²ÂßµãÎ»ÖÃ£¬ÒÔÒ»¶¨ËÙ¶ÈÒÆ¶¯µÄº¯Êı
+        //ä»ç°ä½ç½®åˆ°å·¡é€»ç‚¹ä½ç½®ï¼Œä»¥ä¸€å®šé€Ÿåº¦ç§»åŠ¨çš„å‡½æ•°
         manager.transform.position = Vector2.MoveTowards(manager.transform.position,
             parameter.patrolPoints[patrolPosition], parameter.moveSpeed * Time.deltaTime);
-        //½Ó½üÑ²ÂßµãÊ±ÇĞ»»×´Ì¬
-        if(Vector2.Distance(manager.transform.position, parameter.patrolPoints[patrolPosition]) < 0.2f)
+        //æ¥è¿‘å·¡é€»ç‚¹æ—¶åˆ‡æ¢çŠ¶æ€
+        if(Mathf.Abs(manager.transform.position.x - parameter.patrolPoints[patrolPosition].x) < 0.2f)
         {
             manager.TransitionState(StateType.Idle);
         }
@@ -158,7 +159,7 @@ public class PatrolState : IState
 
     public void OnExit()
     {
-        //¸Ä±äÑ²Âßµã
+        //æ”¹å˜å·¡é€»ç‚¹
         patrolPosition++;
 
         if (patrolPosition >= parameter.patrolPoints.Length)
@@ -171,15 +172,15 @@ public class PatrolState : IState
 
 public class ChaseState : IState
 {
-    //Ìí¼Ó×´Ì¬»úµÄÒıÓÃ
+    //æ·»åŠ çŠ¶æ€æœºçš„å¼•ç”¨
     private FSM manager;
-    //»ñÈ¡ÉèÖÃµÄÊôĞÔ
+    //è·å–è®¾ç½®çš„å±æ€§
     private Parameter parameter;
 
-    //Õ¨µ¯ÊÍ·Å¼ä¸ô¼ÆÊ±Æ÷
+    //ç‚¸å¼¹é‡Šæ”¾é—´éš”è®¡æ—¶å™¨
     private float timer = 0f;
 
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     public ChaseState(FSM manager)
     {
         this.manager = manager;
@@ -195,15 +196,15 @@ public class ChaseState : IState
     {
         timer += Time.deltaTime;
 
-        //Èç¹ûÊÜÉË
+        //å¦‚æœå—ä¼¤
         if (parameter.getHit == true)
         {
             manager.TransitionState(StateType.Hurt);
         }
 
         if (parameter.target == null ||
-            manager.transform.position.x < parameter.chasePoints[0].x ||
-            manager.transform.position.x > parameter.chasePoints[1].x)
+            parameter.target.transform.position.x < parameter.chasePoints[0].x ||
+            parameter.target.transform.position.x > parameter.chasePoints[1].x)
         {
             parameter.target = null;
             manager.TransitionState(StateType.Idle);
@@ -222,15 +223,15 @@ public class ChaseState : IState
                 manager.TransitionState(StateType.Attack);
             }
 
-            //Ô¶³Ì¹¥»÷
+            //è¿œç¨‹æ”»å‡»
             if (timer >= 3)
             {
                 timer = 0;
                 if (parameter.is_Ranged_Attack && parameter.enemyType == EnemyType.Goblin)
                 {
                     manager.TransitionState(StateType.RangedAttack);
-                    //Debug.Log("½øÈëÔ¶³Ì¹¥»÷");
-                    //µ÷ÓÃÈÓÕ¨µ¯
+                    //Debug.Log("è¿›å…¥è¿œç¨‹æ”»å‡»");
+                    //è°ƒç”¨æ‰”ç‚¸å¼¹
 
                     return;
                 }
@@ -246,15 +247,15 @@ public class ChaseState : IState
 
 public class HurtState : IState
 {
-    //Ìí¼Ó×´Ì¬»úµÄÒıÓÃ
+    //æ·»åŠ çŠ¶æ€æœºçš„å¼•ç”¨
     private FSM manager;
-    //»ñÈ¡ÉèÖÃµÄÊôĞÔ
+    //è·å–è®¾ç½®çš„å±æ€§
     private Parameter parameter;
 
-    //´æ´¢ Animator£¨¶¯»­¿ØÖÆÆ÷£©ÖĞµ±Ç°×´Ì¬µÄ¹Ø¼üĞÅÏ¢
+    //å­˜å‚¨ Animatorï¼ˆåŠ¨ç”»æ§åˆ¶å™¨ï¼‰ä¸­å½“å‰çŠ¶æ€çš„å…³é”®ä¿¡æ¯
     private AnimatorStateInfo info;
 
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     public HurtState(FSM manager)
     {
         this.manager = manager;
@@ -266,12 +267,12 @@ public class HurtState : IState
         if (parameter.is_Shield == true && parameter.enemyType == EnemyType.Skeleton2) 
         {
             parameter.animator.Play("Shield");
-            Debug.Log("µ¯·´");
+            Debug.Log("å¼¹å");
         }
         else
         {
             parameter.animator.Play("Hurt");
-            Debug.Log("¿ÛÑª");
+            Debug.Log("æ‰£è¡€");
         }
     }
     public void OnUpdate()
@@ -302,12 +303,12 @@ public class HurtState : IState
 
 public class DieState : IState
 {
-    //Ìí¼Ó×´Ì¬»úµÄÒıÓÃ
+    //æ·»åŠ çŠ¶æ€æœºçš„å¼•ç”¨
     private FSM manager;
-    //»ñÈ¡ÉèÖÃµÄÊôĞÔ
+    //è·å–è®¾ç½®çš„å±æ€§
     private Parameter parameter;
 
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     public DieState(FSM manager)
     {
         this.manager = manager;
@@ -317,6 +318,7 @@ public class DieState : IState
     public void OnEnter()
     {
         parameter.animator.Play("Die");
+        Object.Destroy(manager.gameObject, 5f);
     }
 
     public void OnUpdate()
@@ -335,18 +337,18 @@ public class DieState : IState
 
 public class RangedAttackState : IState
 {
-    //Ìí¼Ó×´Ì¬»úµÄÒıÓÃ
+    //æ·»åŠ çŠ¶æ€æœºçš„å¼•ç”¨
     private FSM manager;
-    //»ñÈ¡ÉèÖÃµÄÊôĞÔ
+    //è·å–è®¾ç½®çš„å±æ€§
     private Parameter parameter;
 
-    //´æ´¢ Animator£¨¶¯»­¿ØÖÆÆ÷£©ÖĞµ±Ç°×´Ì¬µÄ¹Ø¼üĞÅÏ¢
+    //å­˜å‚¨ Animatorï¼ˆåŠ¨ç”»æ§åˆ¶å™¨ï¼‰ä¸­å½“å‰çŠ¶æ€çš„å…³é”®ä¿¡æ¯
     private AnimatorStateInfo info;
 
-    private bool hasSpawnedBomb = false; // ±ÜÃâÖØ¸´Éú³ÉÕ¨µ¯
+    private bool hasSpawnedBomb = false; // é¿å…é‡å¤ç”Ÿæˆç‚¸å¼¹
 
 
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     public RangedAttackState(FSM manager)
     {
         this.manager = manager;
@@ -361,7 +363,7 @@ public class RangedAttackState : IState
 
     public void OnUpdate()
     {
-        //Èç¹ûÊÜÉË
+        //å¦‚æœå—ä¼¤
         if (parameter.getHit == true)
         {
             manager.TransitionState(StateType.Hurt);
@@ -373,7 +375,7 @@ public class RangedAttackState : IState
         {
             if (!hasSpawnedBomb)
             {
-                //µ÷ÓÃÉú³ÉÕ¨µ¯Âß¼­
+                //è°ƒç”¨ç”Ÿæˆç‚¸å¼¹é€»è¾‘
                 SpawnBomb();
                 hasSpawnedBomb = true;
             }
@@ -389,37 +391,37 @@ public class RangedAttackState : IState
 
     private void SpawnBomb()
     {
-        // ¿ÕÒıÓÃĞ£Ñé£¨±ÜÃâ±¨´í£©
+        // ç©ºå¼•ç”¨æ ¡éªŒï¼ˆé¿å…æŠ¥é”™ï¼‰
         if (parameter.bombPrefab == null)
         {
-            Debug.LogError("¸ç²¼ÁÖÎ´ÅäÖÃÕ¨µ¯Ô¤ÖÆÌå£¡", manager.gameObject);
+            Debug.LogError("å“¥å¸ƒæ—æœªé…ç½®ç‚¸å¼¹é¢„åˆ¶ä½“ï¼", manager.gameObject);
             return;
         }
         if (parameter.bombSpawnPoint == null)
         {
-            Debug.LogError("¸ç²¼ÁÖÎ´ÅäÖÃÕ¨µ¯Éú³Éµã£¡", manager.gameObject);
+            Debug.LogError("å“¥å¸ƒæ—æœªé…ç½®ç‚¸å¼¹ç”Ÿæˆç‚¹ï¼", manager.gameObject);
             return;
         }
         if (parameter.target == null)
         {
-            Debug.LogError("¸ç²¼ÁÖÎ´¼ì²âµ½Íæ¼Ò£¡", manager.gameObject);
+            Debug.LogError("å“¥å¸ƒæ—æœªæ£€æµ‹åˆ°ç©å®¶ï¼", manager.gameObject);
             return;
         }
 
-        // 1. Éú³ÉÕ¨µ¯Ô¤ÖÆÌå
+        // 1. ç”Ÿæˆç‚¸å¼¹é¢„åˆ¶ä½“
         GameObject boomObj = Object.Instantiate(
-            parameter.bombPrefab,                // Õ¨µ¯Ô¤ÖÆÌå
-            parameter.bombSpawnPoint.position,   // Éú³ÉÎ»ÖÃ£¨¸ç²¼ÁÖÊÖ²¿£©
-            Quaternion.identity                  // ÎŞĞı×ª
+            parameter.bombPrefab,                // ç‚¸å¼¹é¢„åˆ¶ä½“
+            parameter.bombSpawnPoint.position,   // ç”Ÿæˆä½ç½®ï¼ˆå“¥å¸ƒæ—æ‰‹éƒ¨ï¼‰
+            Quaternion.identity                  // æ— æ—‹è½¬
         );
 
-        // 2. »ñÈ¡Boom×é¼ş²¢µ÷ÓÃInit³õÊ¼»¯
+        // 2. è·å–Boomç»„ä»¶å¹¶è°ƒç”¨Initåˆå§‹åŒ–
         Boom boom = boomObj.GetComponent<Boom>();
         if (boom != null)
         {
-            // ¼ÆËãÕ¨µ¯³¯Ïò£º´ÓÉú³ÉµãÖ¸ÏòÍæ¼Ò
+            // è®¡ç®—ç‚¸å¼¹æœå‘ï¼šä»ç”Ÿæˆç‚¹æŒ‡å‘ç©å®¶
             Vector3 directionToPlayer = parameter.target.position - parameter.bombSpawnPoint.position;
-            // µ÷ÓÃInit£º´«Èë·½Ïò¡¢ËÙ¶È¡¢ÉËº¦£¨ÊÊÅä¼ò»¯ºóµÄBoom½Å±¾£©
+            // è°ƒç”¨Initï¼šä¼ å…¥æ–¹å‘ã€é€Ÿåº¦ã€ä¼¤å®³ï¼ˆé€‚é…ç®€åŒ–åçš„Boomè„šæœ¬ï¼‰
             boom.Init(
                 directionToPlayer,
                 parameter.bombMoveSpeed,
@@ -428,7 +430,7 @@ public class RangedAttackState : IState
         }
         else
         {
-            Debug.LogError("Õ¨µ¯Ô¤ÖÆÌåÎ´¹ÒÔØBoom½Å±¾£¡", boomObj);
+            Debug.LogError("ç‚¸å¼¹é¢„åˆ¶ä½“æœªæŒ‚è½½Boomè„šæœ¬ï¼", boomObj);
             boomObj.GetComponent<Boom>().DestroySelf();
         }
     }
