@@ -151,7 +151,7 @@ public class PatrolState : IState
         manager.transform.position = Vector2.MoveTowards(manager.transform.position,
             parameter.patrolPoints[patrolPosition], parameter.moveSpeed * Time.deltaTime);
         //接近巡逻点时切换状态
-        if(Vector2.Distance(manager.transform.position, parameter.patrolPoints[patrolPosition]) < 0.2f)
+        if(Mathf.Abs(manager.transform.position.x - parameter.patrolPoints[patrolPosition].x) < 0.2f)
         {
             manager.TransitionState(StateType.Idle);
         }
@@ -203,8 +203,8 @@ public class ChaseState : IState
         }
 
         if (parameter.target == null ||
-            manager.transform.position.x < parameter.chasePoints[0].x ||
-            manager.transform.position.x > parameter.chasePoints[1].x)
+            parameter.target.transform.position.x < parameter.chasePoints[0].x ||
+            parameter.target.transform.position.x > parameter.chasePoints[1].x)
         {
             parameter.target = null;
             manager.TransitionState(StateType.Idle);
