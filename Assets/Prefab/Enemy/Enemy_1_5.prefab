@@ -193,7 +193,7 @@ MonoBehaviour:
     chaseSpeed: 1.5
     idleTime: 2
     enemyType: 2
-    is_Black: 0
+    is_Black: 1
     patrolPoints: []
     chasePoints: []
     patrolDistance: 1
