@@ -193,7 +193,7 @@ MonoBehaviour:
     chaseSpeed: 1.5
     idleTime: 2
     enemyType: 0
-    is_Black: 0
+    is_Black: 1
     patrolPoints: []
     chasePoints: []
     patrolDistance: 1
@@ -308,7 +308,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.73181474, y: -0.05913692}
+  m_Offset: {x: 0.73181474, y: -0.13210842}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -319,7 +319,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.6977503, y: 0.51671207}
+  m_Size: {x: 2.6977503, y: 1.6884246}
   m_EdgeRadius: 0
 --- !u!114 &5444290500785817854
 MonoBehaviour:
