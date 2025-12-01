@@ -187,8 +187,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Parameter:
-    health: 3
-    attack: 1
+    health: 100
+    attack: 8
     moveSpeed: 0.5
     chaseSpeed: 1.5
     idleTime: 2

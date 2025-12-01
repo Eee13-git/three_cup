@@ -39770,9 +39770,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.050059408
+    y: 0.000066012144
     width: 1
-    height: 0.8998812
+    height: 0.999868
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -39841,7 +39841,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCamera: {fileID: 649626199}
-  targetAspect: 1.7777778
+  targetAspect: 1.6
 --- !u!1001 &652789934
 PrefabInstance:
   m_ObjectHideFlags: 0
