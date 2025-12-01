@@ -85,11 +85,7 @@ public class PlayerController : MonoBehaviour
     private bool isGround;
 
     // Start is called before the first frame update
-    private void Awake()
-    {
-        Debug.Log("初始化数量"+echoCount);
-        
-    }
+    
     void Start()
     {
         if (isFirst)
