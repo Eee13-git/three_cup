@@ -302,10 +302,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4058b5d04ca8074f9d44169241f490c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 220
-  MaxHealth: 220
+  Health: 280
+  MaxHealth: 280
   AttackStrength: 13
-  CriticalRate: 0.2
+  CriticalRate: 0.4
   DieTime: 3
   DieCount: 0
   lightSpeed: 0.5
@@ -314,10 +314,10 @@ MonoBehaviour:
   lightStrength: 0.03
   cdImage: {fileID: 0}
   dashTime: 0.15
-  dashCoolDown: 1
+  dashCoolDown: 0.8
   dashSpeed: 10
   isDashing: 0
-  defendCoolDown: 3
+  defendCoolDown: 2.4
   Echo_0: {fileID: 3118843089201611964}
   Echo_1: {fileID: 7019935902224384899}
   Echo_2: {fileID: 6993577918312484547}
@@ -468,7 +468,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4928640377649917991, guid: 7bee92e7c47da634f8b6c0f7eee4ad15, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7156717070869811186, guid: 7bee92e7c47da634f8b6c0f7eee4ad15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -666,7 +666,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4928640377649917991, guid: 7bee92e7c47da634f8b6c0f7eee4ad15, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7156717070869811186, guid: 7bee92e7c47da634f8b6c0f7eee4ad15, type: 3}
       propertyPath: m_LocalPosition.x
