@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8491871423117780458}
   - component: {fileID: 6164832237054757969}
   m_Layer: 10
-  m_Name: Enemy_1_1
+  m_Name: Enemy_2_1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -193,7 +193,7 @@ MonoBehaviour:
     chaseSpeed: 1.5
     idleTime: 2
     enemyType: 0
-    is_Black: 0
+    is_Black: 1
     patrolPoints: []
     chasePoints: []
     patrolDistance: 1

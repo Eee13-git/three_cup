@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8491871423117780458}
   - component: {fileID: 6164832237054757969}
   m_Layer: 10
-  m_Name: Enemy_1_1
+  m_Name: Enemy_2_3
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 2245413521112275204}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.249, y: 0.183, z: 0}
+  m_LocalPosition: {x: 0.296, y: 0.124, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 95
-  m_Sprite: {fileID: -1737426242, guid: a6fc93e8f7ef6bc488ec2f9ec886d1a4, type: 3}
+  m_Sprite: {fileID: 1055344256, guid: c8ce20c5f53d91f49baf98590babc630, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -101,7 +101,7 @@ Animator:
   m_GameObject: {fileID: 2245413521112275204}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 401a816032f426f40820ee2d8e1ec420, type: 2}
+  m_Controller: {fileID: 9100000, guid: 91e55c0a74d050449ba6c4acaaa9be93, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -144,8 +144,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.027700156, y: -0.083729476}
-  m_Size: {x: 0.26183397, y: 0.47800547}
+  m_Offset: {x: 0.037201285, y: -0.040461957}
+  m_Size: {x: 0.25184894, y: 0.29162216}
   m_Direction: 0
 --- !u!50 &8491871423117780458
 Rigidbody2D:
@@ -162,7 +162,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -193,7 +193,7 @@ MonoBehaviour:
     chaseSpeed: 1.5
     idleTime: 2
     enemyType: 0
-    is_Black: 0
+    is_Black: 1
     patrolPoints: []
     chasePoints: []
     patrolDistance: 1
@@ -203,7 +203,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 512
     attackPoint: {fileID: 7380544339501865330}
-    attackArea: 0.17
+    attackArea: 0.18
     getHit: 0
     is_Ranged_Attack: 0
     is_Shield: 0
@@ -237,7 +237,7 @@ Transform:
   m_GameObject: {fileID: 8521693026439107575}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.163, y: -0.022, z: 0}
+  m_LocalPosition: {x: 0.097, y: -0.052, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
