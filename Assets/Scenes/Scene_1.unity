@@ -873,7 +873,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Reburn
+  m_Text: Reborn
 --- !u!222 &457164385
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -29400,10 +29400,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0.000066012144
-    width: 1
-    height: 0.999868
+    x: 0.03267923
+    y: 0
+    width: 0.93464154
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
