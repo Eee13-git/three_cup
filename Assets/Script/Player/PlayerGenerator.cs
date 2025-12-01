@@ -17,7 +17,7 @@ public class PlayerGenerator : MonoBehaviour
         if (rougeInterface != null&&rougeInterface.GetRewardSceneIndex()==0)
         {
            playerController.ResetEcho();
-           Debug.Log("น้มใ");
+           //Debug.Log("น้มใ");
             
         }
     }
