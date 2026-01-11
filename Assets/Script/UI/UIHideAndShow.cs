@@ -11,7 +11,22 @@ public class UIHideAndShow : MonoBehaviour
 
     public bool isPanelActive = false;
 
+    private PlayerInputAction controls;
 
+    private void Awake()
+    {
+        controls = new PlayerInputAction();
+        controls.GamePlay.Escape.performed += ctx => Escape();
+    }
+    void OnEnable()
+    {
+        controls.GamePlay.Enable();
+    }
+
+    void OnDisable()
+    {
+        controls.GamePlay.Disable();
+    }
     IEnumerator ShowPanel(GameObject gameObject)
     {
         float timer = 0f;
@@ -36,29 +51,33 @@ public class UIHideAndShow : MonoBehaviour
    
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (!isPanelActive)
-            {
-                
-                StartCoroutine(ShowPanel(Panel));
-                isPanelActive = true;
-                Panel.SetActive(true);
-            }
-            else
-            {
-                
-                StartCoroutine(HidePanel(Panel));
-                isPanelActive = false;
-                Panel.SetActive(false);
-            }
-        }
-        
+        //Escape();
+
     }
     private void Start()
     {
         Panel.SetActive(true);
         StartCoroutine(ShowPanel(Panel));
         isPanelActive = true;
+    }
+    void Escape()
+    {
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!isPanelActive)
+            {
+
+                StartCoroutine(ShowPanel(Panel));
+                isPanelActive = true;
+                Panel.SetActive(true);
+            }
+            else
+            {
+
+                StartCoroutine(HidePanel(Panel));
+                isPanelActive = false;
+                Panel.SetActive(false);
+            }
+        }
     }
 }

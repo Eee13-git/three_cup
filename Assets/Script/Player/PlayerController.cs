@@ -84,8 +84,31 @@ public class PlayerController : MonoBehaviour
     private CircleCollider2D playerFeet;
     private bool isGround;
 
+    private PlayerInputAction controls;
+    private Vector2 move;
+
+    private void Awake()
+    {
+        controls = new PlayerInputAction();
+        controls.GamePlay.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
+        controls.GamePlay.Move.canceled += ctx => move = Vector2.zero;
+
+        controls.GamePlay.Jump.performed += ctx => Jump();
+        controls.GamePlay.Attack.performed += ctx => Attack();
+        controls.GamePlay.Defend.performed += ctx => Defend();
+        controls.GamePlay.Dash.performed += ctx => Dash();
+    }
+    void OnEnable()
+    {
+        controls.GamePlay.Enable();
+    }
+
+    void OnDisable()
+    {
+        controls.GamePlay.Disable();
+    }
     // Start is called before the first frame update
-    
+
     void Start()
     {
         if (isFirst)
@@ -118,13 +141,13 @@ public class PlayerController : MonoBehaviour
         if (isInputEnabled) {
             Run();
             Flip();
-            Jump();
+            //Jump();
             CheckGrounded();
             SwitchAnimation();
 
-            Attack();
-            Defend();
-            Dash();
+            //Attack();
+            //Defend();
+            //Dash();
         }
         cdImage.fillAmount -= 1.0f/dashCoolDown*Time.deltaTime;
 
@@ -168,18 +191,20 @@ public class PlayerController : MonoBehaviour
 
     void Run()
     {
-        moveDir = Input.GetAxisRaw("Horizontal");
+        //moveDir = Input.GetAxisRaw("Horizontal");
 
         if (!isAttack) 
         {
-            Vector2 playerVel = new Vector2(moveDir * runSpeed, playerRigidbody.velocity.y);
+            //Vector2 playerVel = new Vector2(moveDir * runSpeed, playerRigidbody.velocity.y);
+            Vector2 playerVel = new Vector2(move.x * runSpeed, playerRigidbody.velocity.y);
             playerRigidbody.velocity = playerVel;
 
             bool playerHasXAxisSpeed = Mathf.Abs(playerRigidbody.velocity.x) > Mathf.Epsilon;
             playerAnim.SetBool("Run", playerHasXAxisSpeed);
         }else if (attackType=="Light")
         {
-            Vector2 playerVel = new Vector2(moveDir * lightSpeed, playerRigidbody.velocity.y);
+            //Vector2 playerVel = new Vector2(moveDir * lightSpeed, playerRigidbody.velocity.y);
+            Vector2 playerVel = new Vector2(move.x * lightSpeed, playerRigidbody.velocity.y);
             playerRigidbody.velocity = playerVel;
         }
         
@@ -188,7 +213,7 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetButtonDown("Jump"))
+        //if (Input.GetButtonDown("Jump"))
         {
             //CheckGrounded();
             if (isGround) {
@@ -227,7 +252,8 @@ public class PlayerController : MonoBehaviour
 
     void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && !isAttack)
+        //if (Input.GetKeyDown(KeyCode.Return) && !isAttack)
+        if (!isAttack)
         {
             isAttack = true;
             attackType = "Light";
@@ -253,7 +279,8 @@ public class PlayerController : MonoBehaviour
 
     void Defend()
     {
-        if(Input.GetKeyDown(KeyCode.E) && !isAttack&&!isDefend)
+        //if(Input.GetKeyDown(KeyCode.E) && !isAttack&&!isDefend)
+        if (!isAttack && !isDefend)
         {
             if (Time.time-lastDefend>=defendCoolDown) {
                 isDefend = true;
@@ -265,7 +292,7 @@ public class PlayerController : MonoBehaviour
 
     void Dash()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        //if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if(Time.time >= (lastDash + dashCoolDown))
             {
@@ -294,10 +321,10 @@ public class PlayerController : MonoBehaviour
             {
                 if (playerRigidbody.velocity.y > 0 && !isGround)
                 {
-                    playerRigidbody.velocity = new Vector2(dashSpeed * moveDir, jumpSpeed);
+                    playerRigidbody.velocity = new Vector2(dashSpeed * move.x, jumpSpeed);
                 }
 
-                playerRigidbody.velocity =new Vector2(dashSpeed * moveDir, playerRigidbody.velocity.y);
+                playerRigidbody.velocity =new Vector2(dashSpeed * move.x, playerRigidbody.velocity.y);
 
                 dashTimeLeft-= Time.deltaTime;
 
@@ -308,7 +335,7 @@ public class PlayerController : MonoBehaviour
             isDashing =false;
                 if (!isGround)
                 {
-                    playerRigidbody.velocity = new Vector2(dashSpeed * moveDir, jumpSpeed);
+                    playerRigidbody.velocity = new Vector2(dashSpeed * move.x, jumpSpeed);
                 }
             }
 
