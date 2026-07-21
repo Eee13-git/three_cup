@@ -335,7 +335,7 @@ public class PlayerController : MonoBehaviour
             isDashing =false;
                 if (!isGround)
                 {
-                    playerRigidbody.velocity = new Vector2(dashSpeed * move.x, jumpSpeed);
+                    playerRigidbody.velocity = new Vector2(move.x * runSpeed, playerRigidbody.velocity.y);
                 }
             }
 
